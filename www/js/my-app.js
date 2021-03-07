@@ -1,44 +1,50 @@
-  
-// If we need to use custom DOM library, let's save it to $$ variable:
 var $$ = Dom7;
 
 var app = new Framework7({
-    // App root element
     root: '#app',
-    // App Name
     name: 'My App',
-    // App id
     id: 'com.myapp.test',
-    // Enable swipe panel
     panel: {
       swipe: 'left',
     },
-    // Add default routes
     routes: [
-      {
-        path: '/about/',
-        url: 'about.html',
-      },
+      { path: '/', url: 'index.html', },
+      { path: '/perfil/', url: 'perfil.html', },
     ]
-    // ... other parameters
   });
 
 var mainView = app.views.create('.view-main');
+var router = mainView.router;
 
-// Handle Cordova Device Ready Event
-$$(document).on('deviceready', function() {
-    console.log("Device is ready!");
-});
-
-// Option 1. Using one 'page:init' handler for all pages
-$$(document).on('page:init', function (e) {
-    // Do something here when page loaded and initialized
-    console.log(e);
+$$(document).on('page:init', '.page[data-name="index"]', function (e) {
+  $$('#btnIngresar').on('click', loguearUsuario);
+  $$('#btnRegistrar').on('click', registrarUsuario);
 })
 
-// Option 2. Using live 'page:init' event handlers for each page
-$$(document).on('page:init', '.page[data-name="about"]', function (e) {
-    // Do something here when page with data-name="about" attribute loaded and initialized
-    console.log(e);
-    alert('Hello');
-})
+function loguearUsuario() {
+  const email = $$(emailLog).val();
+  const pass = $$(passLog).val();
+
+  console.log('holaaaa login');
+  firebase.auth().signInWithEmailAndPassword(email, pass)
+  .then((user) => {
+    app.loginScreen.close($$('.login'), true);
+    router.navigate('/perfil/');
+  })
+  .catch((error) => {
+    console.log('Error: ' + error.message + ' [' + error.code + ']');
+  });
+}
+
+function registrarUsuario() {
+  const email = $$(emailReg).val();
+  const pass = $$(passReg).val();
+  console.log('holaaaa registro');
+  firebase.auth().createUserWithEmailAndPassword(email, pass)
+    .then((user) => {
+      app.loginScreen.close($$('.register'), true);
+    })
+    .catch((error) => {
+      console.log('Error: ' + error.message + ' [' + error.code + ']');
+    });
+}

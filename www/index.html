@@ -10,7 +10,9 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
+    <!--
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+    -->
 
     <!-- Required meta tags-->
     <meta charset="utf-8">
@@ -23,7 +25,7 @@
     <meta name="color-scheme" content="light dark">
 
     <!-- Your app title -->
-    <title>My App</title>
+    <title>MemoApp</title>
     <!-- Path to Framework7 Library CSS -->
     <link rel="stylesheet" href="lib/framework7/framework7-bundle.min.css">
     <!-- Path to icons -->
@@ -34,62 +36,102 @@
 
 <body>
     <div id="app">
-        <!-- Statusbar overlay -->
         <div class="statusbar"></div>
-    
-        <!-- Your main view, should have "view-main" class -->
         <div class="view view-main">
-       
-            <!-- Top Navbar -->
             <div class="navbar">
                 <div class="navbar-bg"></div>
                 <div class="navbar-inner">
-                    <div class="left"><i class="icon icon-back"></i></div>
-                    <div class="title">Page Title</div>
-                    <div class="right"><i class="icon icon-forward"></i></div>
+                    <div class="title">Bienvenido a MemoApp</div>
                 </div>
             </div>
-    
-            <!-- Toolbar -->
-            <div class="toolbar toolbar-bottom">
-                <div class="toolbar-inner">
-                <!-- Toolbar links -->
-                <a href="#" class="link">Link 1</a>
-                <a href="#" class="link">Link 2</a>
-                </div>
-            </div>
-        
-        <!-- Initial Page, "data-name" contains page name -->
             <div data-name="index" class="page">
-                <!-- Scrollable page content -->
                 <div class="page-content">
-                    <div class="block">
-                        <p>Page content goes here</p>
-                        <!-- Link to another page -->
-                        <a href="/about/" data-view=".page-content">About app</a>
-
-                        <!-- In data-popup attribute we specify CSS selector of popup we need to open -->
-                        <p><a href="#" data-popup=".my-popup" class="popup-open">Open Popup</a></p>
-
-                        <!-- And somewhere in DOM -->
-                        <div class="popup my-popup">
-                            <div class="view">
-                                <div class="page">
-                                    <div class="navbar">
-                                        <div class="navbar-bg"></div>
-                                        <div class="navbar-inner">
-                                            <div class="title">Popup</div>
-                                            <div class="right">
-                                                <!-- Link to close popup -->
-                                                <a class="link popup-close">Close</a>
-                                            </div>
+                    <div class="block block-strong">
+                        <p>
+                            <a href="#" class="button button-fill login-screen-open" data-login-screen=".login">Ingresar</a>
+                        </p>
+                        <p>
+                            <a href="#" class="button button-fill login-screen-open" data-login-screen=".register">Registrarse</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="login-screen login">
+                <div class="view">
+                    <div class="page">
+                        <div class="page-content login-screen-content">
+                            <div class="login-screen-title">Login</div>
+                                <form>
+                                    <div class="list">
+                                        <ul>
+                                            <li class="item-content item-input">
+                                                <div class="item-inner">
+                                                    <div class="item-title item-label">Email</div>
+                                                    <div class="item-input-wrap">
+                                                        <input type="email" name="email-login" id="emailLog" placeholder="Tu email" />
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="item-content item-input">
+                                                <div class="item-inner">
+                                                    <div class="item-title item-label">Contraseña</div>
+                                                    <div class="item-input-wrap">
+                                                        <input type="password" name="pass-login" id="passLog" placeholder="Tu contraseña" />
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="list">
+                                        <ul>
+                                            <li><a class="list-button" id="btnIngresar">Ingresar</a></li>
+                                        </ul>
+                                        <div class="block-footer">
+                                            <p>¿No tienes una cuenta creada? Vuelve al inicio y registrate para ingresar</p>
+                                            <p><a class="link login-screen-close" href="#">Volver al Inicio</a></p>
                                         </div>
                                     </div>
-                                    <div class="page-content">
-                                      ...
+                                </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="login-screen register">
+                <div class="view">
+                    <div class="page">
+                        <div class="page-content login-screen-content">
+                            <div class="login-screen-title">Registro</div>
+                                <form>
+                                    <div class="list">
+                                        <ul>
+                                            <li class="item-content item-input">
+                                                <div class="item-inner">
+                                                    <div class="item-title item-label">Email</div>
+                                                    <div class="item-input-wrap">
+                                                        <input type="email" name="email" id="emailReg" placeholder="Tu email" />
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="item-content item-input">
+                                                <div class="item-inner">
+                                                    <div class="item-title item-label">Contraseña</div>
+                                                    <div class="item-input-wrap">
+                                                        <input type="password" name="pass" id="passReg" placeholder="Tu contraseña" />
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
                                     </div>
-                                </div>
-                            </div>
+                                    <div class="list">
+                                        <ul>
+                                            <li><a class="list-button" id="btnRegistrar">Registrarse</a></li>
+                                        </ul>
+                                        <div class="block-footer">
+                                            <p></p>
+                                            <p><a class="link login-screen-close" href="#">Volver al Inicio</a></p>
+                                        </div>
+                                    </div>
+                                </form>
                         </div>
                     </div>
                 </div>
@@ -97,10 +139,29 @@
         </div>
     </div>
 
-
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="lib/framework7/framework7-bundle.min.js"></script>
     <script type="text/javascript" src="js/my-app.js"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
+
+    <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyDHnPJ4IM1K8h971mpn_uw-Q2Xf6ZXdDlY",
+        authDomain: "memoapp-9479e.firebaseapp.com",
+        projectId: "memoapp-9479e",
+        storageBucket: "memoapp-9479e.appspot.com",
+        messagingSenderId: "1020312253728",
+        appId: "1:1020312253728:web:321a31bba9a44f98fa9345"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    </script>
 </body>
 
 </html>
