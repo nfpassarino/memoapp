@@ -16,6 +16,7 @@ var app = new Framework7({
 var mainView = app.views.create('.view-main');
 var router = mainView.router;
 var userEmail = '';
+var idparaeditar ='';
 $$(document).on('page:init', '.page[data-name="index"]', function (e) {
   $$('#btnIngresar').on('click', loguearUsuario);
   $$('#btnRegistrar').on('click', registrarUsuario);
@@ -51,25 +52,27 @@ function loguearUsuario() {
 
 $$(document).on('page:init', '.page[data-name="perfil"]', function (e) {
   $$('#btnCrearNota').on('click', crearNota);
+  $$('#btnEditarNota').on('click', guardarNota);
   mostrarNotas();
 })
 
 function crearNota() {
-  const titulo = $$(notaTitulo).val();
-  const contenido = $$(notaContenido).val();
+  const titulo = $$('#notaTitulo').val();
+  const contenido = $$('#notaContenido').val();
   firebase.firestore().collection('notas').add({
     notaEmail: userEmail,
     notaTitulo: titulo,
     notaContenido: contenido
   })
-  .then((docRef) => {
+  .then(() => {
     console.log('Carga exitosa! ');
     mostrarNotas();
   })
   .catch((error) => {
     console.error("Error writing document: ", error);
   });
-  //llamar a función que actualice la visualización de notas
+  $$('#notaTitulo').val('');
+  $$('#notaContenido').val('');
 }
 
 function mostrarNotas() {
@@ -78,10 +81,56 @@ function mostrarNotas() {
   queryNotas.get()
   .then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        $$('#notasTablero').append('<div id="' + doc.id + '" class="notas"><h4>' + doc.data().notaTitulo + '</h4><p>' + doc.data().notaContenido + '</p></div>');
+        $$('#notasTablero').append('<div id="' +
+        doc.id + '" class="notas"><h4>' +
+        doc.data().notaTitulo + '</h4><p>' +
+        doc.data().notaContenido + '</p>' +
+        '<button class="button button-small btnEditarNota"><i class="f7-icons">pencil_circle</i></button>' +
+        '<button class="button button-small btnBorrarNota"><i class="f7-icons">trash_circle</i></button>' +
+        '</div>');
       });
+      $$('.btnEditarNota').on('click', editarNota);
+      $$('.btnBorrarNota').on('click', borrarNota);
   })
   .catch((error) => {
       console.log("Error getting documents: ", error);
+  });
+}
+
+function editarNota() {
+  idparaeditar = this.parentNode.id;
+  firebase.firestore().collection('notas').doc(this.parentNode.id).get()
+  .then((doc) => {
+        $$('#notaTitulo').val(doc.data().notaTitulo);
+        $$('#notaContenido').val(doc.data().notaContenido);
+  })
+  .catch((error) => {
+      console.log("Error getting documents: ", error);
+  });
+}
+
+function guardarNota() {
+  const titulo = $$('#notaTitulo').val();
+  const contenido = $$('#notaContenido').val();
+  firebase.firestore().collection('notas').doc(idparaeditar).update({
+    notaTitulo: titulo,
+    notaContenido: contenido
+  })
+  .then(() => {
+    mostrarNotas();
+  })
+  .catch((error) => {
+    console.log("Error: " + error);
+  });
+}
+
+function borrarNota() {
+  idparaeditar = this.parentNode.id;
+  firebase.firestore().collection('notas').doc(this.parentNode.id).delete()
+  .then(() => {
+    mostrarNotas();
+  })
+  .catch((error) => {
+    console.log("Error: ", error);
   });
 }
