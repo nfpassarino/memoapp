@@ -1,51 +1,31 @@
 <div class="page" data-name="perfil">
     <div class="toolbar tabbar toolbar-bottom">
         <div class="toolbar-inner">
-            <a href="#tab-anotador" class="tab-link">Anotador</a>
-            <a href="#tab-inicio" class="tab-link tab-link-active">Inicio</a>
-            <a href="#tab-perfil" class="tab-link">Perfil</a>
+            <a href="#tab-anotador" class="tab-link">
+                <i class="icon f7-icons">list_bullet</i>
+                <span>Anotador</span>
+            </a>
+            <a href="#tab-inicio" class="tab-link tab-link-active">
+                <i class="icon f7-icons">house_alt</i>
+                <span>Inicio</span>
+            </a>
+            <a href="#tab-perfil" class="tab-link">
+                <i class="icon f7-icons">person</i>
+                <span>Perfil</span>
+            </a>
         </div>
     </div>
     <div class="tabs">
         <div id="tab-anotador" class="page-content tab">
-            <div class="block">
-                <h2>Notas</h2>
-                <div class="block-title">Nueva Nota</div>
-                <div class="list no-hairlines-md">
-                    <ul>
-                        <li class="item-content item-input item-input-outline">
-                            <div class="item-media">
-                                <i class="icon demo-list-icon"></i>
-                            </div>
-                            <div class="item-inner">
-                                <div class="item-title item-floating-label">Título</div>
-                                <div class="item-input-wrap">
-                                    <input type="text" placeholder="Título" id="notaTitulo" />
-                                    <span class="input-clear-button"></span>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="item-content item-input item-input-outline">
-                            <div class="item-media">
-                                <i class="icon demo-list-icon"></i>
-                            </div>
-                            <div class="item-inner">
-                                <div class="item-title item-floating-label">Contenido</div>
-                                <div class="item-input-wrap">
-                                    <textarea class="resizable" placeholder="Escriba su nota aquí..." id="notaContenido" ></textarea>
-                                    <span class="input-clear-button"></span>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <button class="button" id="btnEditarNota">Editar nota</button>
-                <button class="button" id="btnCrearNota">Agregar nota</button>
+            <div class="row justify-content-space-between margin">
+                <h1 class="col-90">NOTAS</h1>
+                <button class="button button-fill popup-open col-10" data-popup=".crearnota-popup">
+                    <i class="icon f7-icons if-not-md">plus</i>
+                    <i class="icon material-icons md-only">add</i>
+                </button>
             </div>
-            <div class="block">
-                <div id="notasTablero">
+            <div id="notasTablero" class="row justify-content-space-evenly margin">
                     <!-- Acá van las notas para agregar -->
-                </div>
             </div>
         </div>
         <div id="tab-inicio" class="page-content tab tab-active">
@@ -62,4 +42,94 @@
             </div>
         </div>
     </div>
+    <div class="popup crearnota-popup">
+        <div class="view">
+            <div class="page">
+                <div class="navbar">
+                    <div class="navbar-bg"></div>
+                    <div class="navbar-inner">
+                        <div class="title">Nueva Nota</div>
+                        <div class="right">
+                            <a class="link popup-close">
+                                <i class="icon icon-back"></i>
+                                <span class="ios-only">Back</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-content">
+                    <div class="block">
+                        <div class="list">
+                            <ul>
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-input-wrap">
+                                            <input type="text" placeholder="Título" id="notaTitulo" />
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-input-wrap">
+                                            <textarea class="resizable" placeholder="Nota" id="notaContenido" ></textarea>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <button class="button button-fill popup-close" id="btnCrearNota">Agregar nota</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="popup editarnota-popup">
+        <div class="view">
+            <div class="page">
+                <div class="navbar">
+                    <div class="navbar-bg"></div>
+                    <div class="navbar-inner">
+                        <div class="left">
+                            <a class="link btnBorrarNota popup-close">
+                                <i class="f7-icons">trash</i>
+                                <span class="ios-only">Trash</span>
+                            </a>
+                        </div>
+                        <div class="right">
+                            <a class="link popup-close">
+                                <i class="icon icon-back"></i>
+                                <span class="ios-only">Back</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-content">
+                    <div class="block">
+                        <div class="list">
+                            <ul>
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-input-wrap">
+                                            <input type="text" placeholder="Título" id="edNotaTitulo" />
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-input-wrap">
+                                            <textarea class="resizable" placeholder="Nota" id="edNotaContenido" ></textarea>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <button class="button button-fill popup-close" id="btnEditarNota">Editar nota</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+

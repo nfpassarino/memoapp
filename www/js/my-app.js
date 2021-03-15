@@ -17,6 +17,7 @@ var mainView = app.views.create('.view-main');
 var router = mainView.router;
 var userEmail = '';
 var idparaeditar ='';
+
 $$(document).on('page:init', '.page[data-name="index"]', function (e) {
   $$('#btnIngresar').on('click', loguearUsuario);
   $$('#btnRegistrar').on('click', registrarUsuario);
@@ -82,15 +83,13 @@ function mostrarNotas() {
   .then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         $$('#notasTablero').append('<div id="' +
-        doc.id + '" class="notas"><h4>' +
-        doc.data().notaTitulo + '</h4><p>' +
-        doc.data().notaContenido + '</p>' +
-        '<button class="button button-small btnEditarNota"><i class="f7-icons">pencil_circle</i></button>' +
-        '<button class="button button-small btnBorrarNota"><i class="f7-icons">trash_circle</i></button>' +
-        '</div>');
+        doc.id + '" class="notas col-50 row popup-open btnEditarNota" data-popup=".editarnota-popup"><div class="col-80">' +
+        '<span class="titunota col-100">' + doc.data().notaTitulo + '</span>' +
+        '<p class="col-100">' + doc.data().notaContenido + '</p></div>' +
+        '<div class="col-20">' +
+        '</div></div>');
       });
       $$('.btnEditarNota').on('click', editarNota);
-      $$('.btnBorrarNota').on('click', borrarNota);
   })
   .catch((error) => {
       console.log("Error getting documents: ", error);
@@ -98,11 +97,12 @@ function mostrarNotas() {
 }
 
 function editarNota() {
-  idparaeditar = this.parentNode.id;
-  firebase.firestore().collection('notas').doc(this.parentNode.id).get()
+  $$('.btnBorrarNota').on('click', borrarNota);
+  idparaeditar = this.id;
+  firebase.firestore().collection('notas').doc(idparaeditar).get()
   .then((doc) => {
-        $$('#notaTitulo').val(doc.data().notaTitulo);
-        $$('#notaContenido').val(doc.data().notaContenido);
+        $$('#edNotaTitulo').val(doc.data().notaTitulo);
+        $$('#edNotaContenido').val(doc.data().notaContenido);
   })
   .catch((error) => {
       console.log("Error getting documents: ", error);
@@ -110,8 +110,8 @@ function editarNota() {
 }
 
 function guardarNota() {
-  const titulo = $$('#notaTitulo').val();
-  const contenido = $$('#notaContenido').val();
+  const titulo = $$('#edNotaTitulo').val();
+  const contenido = $$('#edNotaContenido').val();
   firebase.firestore().collection('notas').doc(idparaeditar).update({
     notaTitulo: titulo,
     notaContenido: contenido
@@ -125,8 +125,7 @@ function guardarNota() {
 }
 
 function borrarNota() {
-  idparaeditar = this.parentNode.id;
-  firebase.firestore().collection('notas').doc(this.parentNode.id).delete()
+  firebase.firestore().collection('notas').doc(idparaeditar).delete()
   .then(() => {
     mostrarNotas();
   })

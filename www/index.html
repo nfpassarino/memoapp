@@ -38,21 +38,18 @@
     <div id="app">
         <div class="statusbar"></div>
         <div class="view view-main">
-            <div class="navbar">
-                <div class="navbar-bg"></div>
-                <div class="navbar-inner">
-                    <div class="title">Bienvenido a MemoApp</div>
-                </div>
-            </div>
             <div data-name="index" class="page">
                 <div class="page-content">
-                    <div class="block block-strong">
-                        <p>
-                            <a href="#" class="button button-fill login-screen-open" data-login-screen=".login">Ingresar</a>
-                        </p>
-                        <p>
-                            <a href="#" class="button button-fill login-screen-open" data-login-screen=".register">Registrarse</a>
-                        </p>
+                    <div class="row justify-content-center margin-vertical">
+                        <img src="img/logo.png" id="logo" class="col-60 margin-vertical" />
+                        <p class="col-80 text-align-center">La App que buscabas para no olvidarte de lo importante</p>
+                    </div>
+                    <div class="row justify-content-center margin-vertical">
+                        <button class="button button-fill login-screen-open col-80 margin-vertical" data-login-screen=".register">Registrate ahora</button>
+                    </div>
+                    <div class="block-footer">
+                        <p class="text-align-center">¿Ya tenés cuenta?</p>
+                        <button class="button login-screen-open" data-login-screen=".login">Inicia sesión</button>
                     </div>
                 </div>
             </div>
