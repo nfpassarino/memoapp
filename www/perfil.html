@@ -16,10 +16,11 @@
         </div>
     </div>
     <div class="tabs">
+        <!-- ------------------------------------ TAB ANOTADOR ------------------------------------ -->
         <div id="tab-anotador" class="page-content tab">
             <div class="row justify-content-space-between margin">
-                <h1 class="col-90">NOTAS</h1>
-                <button class="button button-fill popup-open col-10" data-popup=".crearnota-popup">
+                <h1 class="col-80">NOTAS</h1>
+                <button class="col-10 button button-small button-round button-outline popup-open" data-popup=".crearnota-popup">
                     <i class="icon f7-icons if-not-md">plus</i>
                     <i class="icon material-icons md-only">add</i>
                 </button>
@@ -28,11 +29,41 @@
                     <!-- Acá van las notas para agregar -->
             </div>
         </div>
+        <!-- ------------------------------------ TAB INICIO ------------------------------------ -->
         <div id="tab-inicio" class="page-content tab tab-active">
-            <div class="block">
-                <p>INICIO</p>
+            <div class="row">
+                Hola Pepito! (Tarjeta de Usuario) Caminaste tantos pasos... hoy es un día soleado, aprovechalo!
+            </div>
+            <div class="row">
+                Boton SOS
+            </div>
+            <div class="row">
+                <div class="col-50">
+                    <div class="row justify-content-space-between margin">
+                        <p class="col-80">Cumples del Mes</p>
+                        <button class="col-10 button button-small button-round button-outline popup-open"  data-popup=".crearcumple-popup">
+                            <i class="icon f7-icons if-not-md">plus</i>
+                            <i class="icon material-icons md-only">add</i>
+                        </button>
+                    </div>
+                    <div id="cumpleTablero" class="row">
+                        <!-- Acá van los cumples -->
+                </div>
+                </div>
+                <div class="col-50">
+                    Soy la lista de pastillas
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-50">
+                    Soy los accesos directos: Juego, Binoculares, etc.
+                </div>
+                <div class="col-50">
+                    Soy la lista de turnos al doc
+                </div>
             </div>
         </div>
+        <!-- ------------------------------------ TAB PERFIL ------------------------------------ -->
         <div id="tab-perfil" class="page-content tab">
             <div class="block">
                 <h2>PERFIL</h2>
@@ -42,6 +73,114 @@
             </div>
         </div>
     </div>
+    <!-- ------------------------------------ POPUP CREAR CUMPLE ------------------------------------ -->
+    <div class="popup crearcumple-popup">
+        <div class="view">
+            <div class="page">
+                <div class="navbar">
+                    <div class="navbar-bg"></div>
+                    <div class="navbar-inner">
+                        <div class="title">Nuevo Cumpleaños</div>
+                        <div class="right">
+                            <a class="link popup-close">
+                                <i class="icon icon-back"></i>
+                                <span class="ios-only">Back</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-content">
+                    <div class="block">
+                        <div class="list">
+                            <ul>
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-input-wrap">
+                                            <input type="text" placeholder="Nombre" id="cumpleNombre" />
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-input-wrap">
+                                            <input type="text" placeholder="Parentezco/Relación" id="cumpleRelacion" />
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="item-content item-input">
+                                        <div class="item-inner">
+                                            <div class="item-input-wrap">
+                                                <input type="text" placeholder="Seleccione la fecha" readonly="readonly" id="cumpleCalendar" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <button class="button button-fill popup-close" id="btnCrearCumple">Agendar Cumpleaños</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ------------------------------------ POPUP EDITAR CUMPLE ------------------------------------ -->
+    <div class="popup editarcumple-popup">
+        <div class="view">
+            <div class="page">
+                <div class="navbar">
+                    <div class="navbar-bg"></div>
+                    <div class="navbar-inner">
+                        <div class="left">
+                            <a class="link btnBorrarCumple popup-close">
+                                <i class="f7-icons">trash</i>
+                                <span class="ios-only">Trash</span>
+                            </a>
+                        </div>
+                        <div class="right">
+                            <a class="link popup-close">
+                                <i class="icon icon-back"></i>
+                                <span class="ios-only">Back</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-content">
+                    <div class="block">
+                        <div class="list">
+                            <ul>
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-input-wrap">
+                                            <input type="text" placeholder="Nombre" id="edCumpleNombre" />
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-input-wrap">
+                                            <input type="text" placeholder="Parentezco/Relación" id="edCumpleRelacion" />
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="item-content item-input">
+                                        <div class="item-inner">
+                                            <div class="item-input-wrap">
+                                                <input type="text" placeholder="Seleccione la fecha" readonly="readonly" id="edCumpleCalendar" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <button class="button button-fill popup-close" id="btnGuardarCumple">Editar Cumpleaños</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ------------------------------------ POPUP CREAR NOTA ------------------------------------ -->
     <div class="popup crearnota-popup">
         <div class="view">
             <div class="page">
@@ -83,6 +222,7 @@
             </div>
         </div>
     </div>
+    <!-- ------------------------------------ POPUP EDITAR NOTA ------------------------------------ -->
     <div class="popup editarnota-popup">
         <div class="view">
             <div class="page">
@@ -123,7 +263,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <button class="button button-fill popup-close" id="btnEditarNota">Editar nota</button>
+                        <button class="button button-fill popup-close" id="btnGuardarNota">Editar nota</button>
                     </div>
                 </div>
             </div>

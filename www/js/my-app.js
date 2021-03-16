@@ -1,3 +1,4 @@
+// ---------------------------------- VARIABLES GLOBALES ----------------------------------
 var $$ = Dom7;
 
 var app = new Framework7({
@@ -17,12 +18,16 @@ var mainView = app.views.create('.view-main');
 var router = mainView.router;
 var userEmail = '';
 var idparaeditar ='';
+let calendarCumple;
+
+// ---------------------------------- INDEX ----------------------------------
 
 $$(document).on('page:init', '.page[data-name="index"]', function (e) {
   $$('#btnIngresar').on('click', loguearUsuario);
   $$('#btnRegistrar').on('click', registrarUsuario);
 })
 
+// ---------------------------------- FUNCIONES DEL INDEX ----------------------------------
 function registrarUsuario() {
   const email = $$(emailReg).val();
   const pass = $$(passReg).val();
@@ -51,11 +56,114 @@ function loguearUsuario() {
   });
 }
 
+// ---------------------------------- PERFIL ----------------------------------
+
 $$(document).on('page:init', '.page[data-name="perfil"]', function (e) {
+  calendarCumple = app.calendar.create({
+    inputEl: '#cumpleCalendar',
+    openIn: 'customModal',
+    header: true,
+    footer: true,
+  });
+  edCalendarCumple = app.calendar.create({
+    inputEl: '#edCumpleCalendar',
+    openIn: 'customModal',
+    header: true,
+    footer: true,
+  });
   $$('#btnCrearNota').on('click', crearNota);
-  $$('#btnEditarNota').on('click', guardarNota);
+  $$('#btnGuardarNota').on('click', guardarNota);
+  $$('#btnCrearCumple').on('click', crearCumple);
+  $$('#btnGuardarCumple').on('click', guardarCumple);
   mostrarNotas();
+  mostrarCumple();
 })
+
+// ---------------------------------- FUNCIONES CUMPLEAÑOS ----------------------------------
+
+function crearCumple() {
+  const nombre = $$('#cumpleNombre').val();
+  const relacion = $$('#cumpleRelacion').val();
+  const fecha = $$('#cumpleCalendar').val();
+  firebase.firestore().collection('cumpleaños').add({
+    cumpleEmail: userEmail,
+    cumpleNombre: nombre,
+    cumpleRelacion: relacion,
+    cumpleFecha: fecha
+  })
+  .then(() => {
+    console.log('Carga exitosa! ');
+    mostrarCumple();
+  })
+  .catch((error) => {
+    console.error("Error writing document: ", error);
+  });
+  $$('#cumpleNombre').val('');
+  $$('#cumpleRelacion').val('');
+  $$('#cumpleCalendar').val('');
+}
+
+function mostrarCumple() {
+  const queryCumples = firebase.firestore().collection('cumpleaños').where('cumpleEmail', '==', userEmail);
+  queryCumples.get()
+  .then((querySnapshot) => {
+    $$('#cumpleTablero').html('');
+    querySnapshot.forEach((doc) => {
+      $$('#cumpleTablero').append('<div id="' +
+      doc.id + '" class="cumples col-100 row popup-open editarCumple" data-popup=".editarcumple-popup">' +
+      doc.data().cumpleFecha + '   ' + doc.data().cumpleNombre + '[' + doc.data().cumpleRelacion + ']' +
+      '</div>');
+    });
+    $$('.editarCumple').on('click', editarCumple);
+  })
+  .catch((error) => {
+    console.log("Error getting documents: ", error);
+  });
+}
+
+function editarCumple() {
+  $$('.btnBorrarCumple').on('click', borrarCumple);
+  idparaeditar = this.id;
+  firebase.firestore().collection('cumpleaños').doc(idparaeditar).get()
+  .then((doc) => {
+    $$('#edCumpleNombre').val(doc.data().cumpleNombre);
+    $$('#edCumpleRelacion').val(doc.data().cumpleRelacion);
+    $$('#edCumpleCalendar').val(doc.data().cumpleCalendar);
+  })
+  .catch((error) => {
+      console.log("Error getting documents: ", error);
+  });
+}
+
+function guardarCumple() {
+  const nombre = $$('#edCumpleNombre').val();
+  const relacion = $$('#edCumpleRelacion').val();
+  const fecha = $$('#edCumpleCalendar').val();
+  firebase.firestore().collection('cumpleaños').doc(idparaeditar).update({
+    cumpleNombre: nombre,
+    cumpleRelacion: relacion,
+    cumpleFecha: fecha
+  })
+  .then(() => {
+    mostrarCumple();
+  })
+  .catch((error) => {
+    console.log("Error: " + error);
+  });
+}
+
+function borrarCumple() {
+  firebase.firestore().collection('cumpleaños').doc(idparaeditar).delete()
+  .then(() => {
+    mostrarCumple();
+  })
+  .catch((error) => {
+    console.log("Error: ", error);
+  });
+}
+
+
+// ---------------------------------- FUNCIONES ANOTADOR ----------------------------------
 
 function crearNota() {
   const titulo = $$('#notaTitulo').val();
@@ -77,19 +185,19 @@ function crearNota() {
 }
 
 function mostrarNotas() {
-  $$('#notasTablero').html('');
   const queryNotas = firebase.firestore().collection('notas').where('notaEmail', '==', userEmail);
   queryNotas.get()
   .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        $$('#notasTablero').append('<div id="' +
-        doc.id + '" class="notas col-50 row popup-open btnEditarNota" data-popup=".editarnota-popup"><div class="col-80">' +
-        '<span class="titunota col-100">' + doc.data().notaTitulo + '</span>' +
-        '<p class="col-100">' + doc.data().notaContenido + '</p></div>' +
-        '<div class="col-20">' +
-        '</div></div>');
-      });
-      $$('.btnEditarNota').on('click', editarNota);
+    $$('#notasTablero').html('');
+    querySnapshot.forEach((doc) => {
+      $$('#notasTablero').append('<div id="' +
+      doc.id + '" class="notas col-50 row popup-open btnEditarNota" data-popup=".editarnota-popup"><div class="col-80">' +
+      '<span class="titunota col-100">' + doc.data().notaTitulo + '</span>' +
+      '<p class="col-100">' + doc.data().notaContenido + '</p></div>' +
+      '<div class="col-20">' +
+      '</div></div>');
+    });
+    $$('.btnEditarNota').on('click', editarNota);
   })
   .catch((error) => {
       console.log("Error getting documents: ", error);
@@ -101,11 +209,11 @@ function editarNota() {
   idparaeditar = this.id;
   firebase.firestore().collection('notas').doc(idparaeditar).get()
   .then((doc) => {
-        $$('#edNotaTitulo').val(doc.data().notaTitulo);
-        $$('#edNotaContenido').val(doc.data().notaContenido);
+    $$('#edNotaTitulo').val(doc.data().notaTitulo);
+    $$('#edNotaContenido').val(doc.data().notaContenido);
   })
   .catch((error) => {
-      console.log("Error getting documents: ", error);
+    console.log("Error getting documents: ", error);
   });
 }
 
@@ -127,10 +235,22 @@ function guardarNota() {
 function borrarNota() {
   firebase.firestore().collection('notas').doc(idparaeditar).delete()
   .then(() => {
-    $$('#notasTablero').html('');
     mostrarNotas();
   })
   .catch((error) => {
     console.log("Error: ", error);
   });
 }
+
+
+
+
+
+/* SOLUCION PARA REFRESCAR PANTALLA TODOS LOS DIAS A LAS 00.00, CON UN INTERVAL CADA 1 MINUTO
+var dia = new Date();
+var hs = dia.getHours();
+var min = dia.getMinutes();
+var sec = dia.getSeconds();
+if (hs === 0 && min === 0 && sec < 60) {
+  //refrescar pantalla
+}*/
