@@ -127,6 +127,7 @@ function guardarNota() {
 function borrarNota() {
   firebase.firestore().collection('notas').doc(idparaeditar).delete()
   .then(() => {
+    $$('#notasTablero').html('');
     mostrarNotas();
   })
   .catch((error) => {
