@@ -71,13 +71,221 @@ $$(document).on('page:init', '.page[data-name="perfil"]', function (e) {
     header: true,
     footer: true,
   });
+  calendarTurno = app.calendar.create({
+    inputEl: '#turnoCalendar',
+    timePicker: true,
+    dateFormat: { month: 'numeric', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' },
+  });
+  edCalendarTurno = app.calendar.create({
+    inputEl: '#edTurnoCalendar',
+    timePicker: true,
+    dateFormat: { month: 'numeric', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' },
+  });
+
   $$('#btnCrearNota').on('click', crearNota);
   $$('#btnGuardarNota').on('click', guardarNota);
   $$('#btnCrearCumple').on('click', crearCumple);
   $$('#btnGuardarCumple').on('click', guardarCumple);
+  $$('#btnCrearPasti').on('click', crearPasti);
+  $$('#btnGuardarPasti').on('click', guardarPasti);
+  $$('#btnCrearTurno').on('click', crearTurno);
+  $$('#btnGuardarTurno').on('click', guardarTurno);
+
   mostrarNotas();
   mostrarCumple();
+  mostrarPasti();
+  mostrarTurno();
 })
+
+// ---------------------------------- FUNCIONES TURNOS ----------------------------------
+
+function crearTurno() {
+  const medico = $$('#turnoMedico').val();
+  const lugar = $$('#turnoLugar').val();
+  const consulta = $$('#turnoConsulta').val();
+  const fecha = $$('#turnoCalendar').val();
+  firebase.firestore().collection('turnos').add({
+    turnoEmail: userEmail,
+    turnoMedico: medico,
+    turnoLugar: lugar,
+    turnoConsulta: consulta,
+    turnoFecha: fecha
+  })
+  .then(() => {
+    console.log('Carga exitosa! ');
+    mostrarTurno();
+  })
+  .catch((error) => {
+    console.error("Error writing document: ", error);
+  });
+  $$('#turnoMedico').val('');
+  $$('#turnoLugar').val('');
+  $$('#turnoConsulta').val('');
+  $$('#turnoCalendar').val('');
+}
+
+function mostrarTurno() {
+  const queryTurnos = firebase.firestore().collection('turnos').where('turnoEmail', '==', userEmail);
+  queryTurnos.get()
+  .then((querySnapshot) => {
+    $$('#turnoTablero').html('');
+    querySnapshot.forEach((doc) => {
+      $$('#turnoTablero').append('<div id="' +
+      doc.id + '" class="turnos col-100 row popup-open editarTurno" data-popup=".editarturno-popup">' +
+      doc.data().turnoMedico + '  ' + '[' + doc.data().turnoFecha + ']' +
+      '</div>');
+    });
+    $$('.editarTurno').on('click', editarTurno);
+  })
+  .catch((error) => {
+    console.log("Error getting documents: ", error);
+  });
+}
+
+function editarTurno() {
+  $$('.btnBorrarTurno').on('click', borrarTurno);
+  idparaeditar = this.id;
+  firebase.firestore().collection('turnos').doc(idparaeditar).get()
+  .then((doc) => {
+    $$('#edTurnoMedico').val(doc.data().turnoMedico);
+    $$('#edTurnoLugar').val(doc.data().turnoLugar);
+    $$('#edTurnoConsulta').val(doc.data().turnoConsulta);
+    $$('#edTurnoCalendar').val(doc.data().turnoCalendar);
+  })
+  .catch((error) => {
+      console.log("Error getting documents: ", error);
+  });
+}
+
+function guardarTurno() {
+  const medico = $$('#edTurnoMedico').val();
+  const lugar = $$('#edTurnoLugar').val();
+  const consulta = $$('#edTurnoConsulta').val();
+  const fecha = $$('#edTurnoCalendar').val();
+  firebase.firestore().collection('turnos').doc(idparaeditar).update({
+    turnoMedico: medico,
+    turnoLugar: lugar,
+    turnoConsulta: consulta,
+    turnoFecha: fecha
+  })
+  .then(() => {
+    mostrarTurno();
+  })
+  .catch((error) => {
+    console.log("Error: " + error);
+  });
+}
+
+function borrarTurno() {
+  firebase.firestore().collection('turnos').doc(idparaeditar).delete()
+  .then(() => {
+    mostrarTurno();
+  })
+  .catch((error) => {
+    console.log("Error: ", error);
+  });
+}
+
+// ---------------------------------- FUNCIONES PASTILLERO ----------------------------------
+function crearPasti() {
+  $$('#pastiMedicamento').val('');
+  $$('#pastiDosis').val('');
+  $$('#pastiHorario').val('');
+  $$('input[name="pastiDias"]').prop('checked', false);
+  var dias = [];
+  $$('[name="pastiDias"]:checked').map((dia) => {
+    dias.push(dia.value);
+  });
+  const medicamento = $$('#pastiMedicamento').val();
+  const dosis = $$('#pastiDosis').val();
+  const horario = $$('#pastiHorario').val();
+  firebase.firestore().collection('medicamentos').add({
+    pastiEmail: userEmail,
+    pastiMedicamento: medicamento,
+    pastiDosis: dosis,
+    pastiHorario: horario,
+    pastiDias: dias
+  })
+  .then(() => {
+    console.log('Carga exitosa! ');
+    mostrarPasti();
+  })
+  .catch((error) => {
+    console.error("Error writing document: ", error);
+  });
+}
+
+function mostrarPasti() {
+  const queryPastis = firebase.firestore().collection('medicamentos').where('pastiEmail', '==', userEmail);
+  queryPastis.get()
+  .then((querySnapshot) => {
+    $$('#pastiTablero').html('');
+    querySnapshot.forEach((doc) => {
+      $$('#pastiTablero').append('<div id="' +
+      doc.id + '" class="pastis col-100 row popup-open editarPasti" data-popup=".editarpasti-popup">' +
+      doc.data().pastiHorario + '   ' + doc.data().pastiMedicamento + '[' + doc.data().pastiDosis + ']' +
+      '</div>');
+    });
+    $$('.editarPasti').on('click', editarPasti);
+  })
+  .catch((error) => {
+    console.log("Error en mostrarPasti: ", error);
+  });
+}
+
+function editarPasti() {
+  $$('#edPastiMedicamento').val('');
+  $$('#edPastiDosis').val('');
+  $$('#edPastiHorario').val('');
+  $$('input[name="edPastiDias"]').prop('checked', false);
+  $$('.btnBorrarPasti').on('click', borrarPasti);
+  idparaeditar = this.id;
+  firebase.firestore().collection('medicamentos').doc(idparaeditar).get()
+  .then((doc) => {
+    $$('#edPastiMedicamento').val(doc.data().pastiMedicamento);
+    $$('#edPastiDosis').val(doc.data().pastiDosis);
+    $$('#edPastiHorario').val(doc.data().pastiHorario);
+    doc.data().pastiDias.map((pastidia) => {
+      $$('input[name="edPastiDias"][value="' + pastidia + '"]').prop('checked', true);
+    });
+  })
+  .catch((error) => {
+      console.log("Error cargando pasti en editarPasti ", error);
+  });
+}
+
+function guardarPasti() {
+  var dias = [];
+  $$('[name="edPastiDias"]:checked').map((dia) => {
+    dias.push(dia.value);
+  });
+  const medicamento = $$('#edPastiMedicamento').val();
+  const dosis = $$('#edPastiDosis').val();
+  const horario = $$('#edPastiHorario').val();
+  firebase.firestore().collection('medicamentos').doc(idparaeditar).update({
+    pastiMedicamento: medicamento,
+    pastiDosis: dosis,
+    pastiHorario: horario,
+    pastiDias: dias
+  })
+  .then(() => {
+    console.log('se grabooo chamannn');
+    mostrarPasti();
+  })
+  .catch((error) => {
+    console.log("Error al guardarPasti: " + error);
+  });
+}
+
+function borrarPasti() {
+  firebase.firestore().collection('medicamentos').doc(idparaeditar).delete()
+  .then(() => {
+    mostrarPasti();
+  })
+  .catch((error) => {
+    console.log("Error: ", error);
+  });
+}
 
 // ---------------------------------- FUNCIONES CUMPLEAÑOS ----------------------------------
 
@@ -161,7 +369,6 @@ function borrarCumple() {
     console.log("Error: ", error);
   });
 }
-
 
 // ---------------------------------- FUNCIONES ANOTADOR ----------------------------------
 
