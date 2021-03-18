@@ -18,65 +18,63 @@
     <div class="tabs">
         <!-- ------------------------------------ TAB ANOTADOR ------------------------------------ -->
         <div id="tab-anotador" class="page-content tab">
-            <div class="row justify-content-space-between margin">
-                <h1 class="col-80">NOTAS</h1>
-                <button class="col-10 button button-small button-round button-outline popup-open" data-popup=".crearnota-popup">
-                    <i class="icon f7-icons if-not-md">plus</i>
-                    <i class="icon material-icons md-only">add</i>
+            <div class="anotador-encabezado">
+                <h1>📝 Notas</h1>
+                <button class="btnCrearNota button popup-open"  data-popup=".crearnota-popup">
+                    +
                 </button>
             </div>
+            <button id="btnCompras" class="button button-fill">🛒 LISTA DE COMPRAS +</button>
             <div id="notasTablero" class="row justify-content-space-evenly margin">
                     <!-- Acá van las notas para agregar -->
             </div>
         </div>
         <!-- ------------------------------------ TAB INICIO ------------------------------------ -->
         <div id="tab-inicio" class="page-content tab tab-active">
-            <div class="row">
-                Hola Pepito! (Tarjeta de Usuario) Caminaste tantos pasos... hoy es un día soleado, aprovechalo!
-            </div>
-            <div class="row">
-                Boton SOS
-            </div>
-            <div class="row">
-                <div class="col-50">
-                    <div class="row justify-content-space-between margin">
-                        <p class="col-80">Cumpleaños</p>
-                        <button class="col-10 button button-small button-round button-outline popup-open"  data-popup=".crearcumple-popup">
-                            <i class="icon f7-icons if-not-md">plus</i>
-                            <i class="icon material-icons md-only">add</i>
-                        </button>
-                    </div>
-                    <div id="cumpleTablero" class="row">
-                        <!-- Acá van los cumples -->
-                    </div>
+            <div id="tarjetaSaludo" class="row">
+                <div class="col-70">
+                    <h2 id="userSaludo">Hola <span id="nombreSaludo">Usuario</span>!</h2>
+                    <div id="pasosSaludo">Hoy caminaste <span id="cantidadPasosSaludo">0</span> pasos</div>
+                    <div id="pronosticoSaludo">**pronóstico**</div>
                 </div>
-                <div class="col-50">
-                    <div class="row justify-content-space-between margin">
-                        <p class="col-80">Pastillero</p>
-                        <button class="col-10 button button-small button-round button-outline popup-open"  data-popup=".crearpasti-popup">
-                            <i class="icon f7-icons if-not-md">plus</i>
-                            <i class="icon material-icons md-only">add</i>
+            </div>
+            <div class="botonera">
+                <button id="btnSOS" class="button button-fill">S O S</button>
+                <button id="btnMEMO" class="button button-fill">MEMO</button>
+                <button id="btnBinoculares" class="button button-fill">Binoculares</button>
+            </div>
+            <div class="tarjetaTablero">
+                <div id="tarjeta-pastillero" class="tarjeta">
+                    <div class="tarjeta-encabezado">
+                        <h3>💊 Pastillero</h3>
+                        <button class="btnCrear button popup-open"  data-popup=".crearpasti-popup">
+                            +
                         </button>
                     </div>
                     <div id="pastiTablero" class="row">
                         <!-- Acá van los medicamentos -->
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-50">
-                    Soy los accesos directos: Juego, Binoculares, etc.
-                </div>
-                <div class="col-50">
-                    <div class="row justify-content-space-between margin">
-                        <p class="col-80">Turnos</p>
-                        <button class="col-10 button button-small button-round button-outline popup-open"  data-popup=".crearturno-popup">
-                            <i class="icon f7-icons if-not-md">plus</i>
-                            <i class="icon material-icons md-only">add</i>
+                <div id="tarjeta-turno" class="tarjeta">
+                    <div class="tarjeta-encabezado">
+                        <h3>🩺 Turnos</h3>
+                        <button class="btnCrear button popup-open"  data-popup=".crearturno-popup">
+                            +
                         </button>
                     </div>
                     <div id="turnoTablero" class="row">
                         <!-- Acá van los turnos -->
+                    </div>
+                </div>
+                <div id="tarjeta-cumple" class="tarjeta">
+                    <div class="tarjeta-encabezado">
+                        <h3>🎂 Cumpleaños</h3>
+                        <button class="btnCrear button popup-open"  data-popup=".crearcumple-popup">
+                            +
+                        </button>
+                    </div>
+                    <div id="cumpleTablero" class="row">
+                        <!-- Acá van los cumples -->
                     </div>
                 </div>
             </div>
