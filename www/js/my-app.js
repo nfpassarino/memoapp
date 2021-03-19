@@ -84,6 +84,11 @@ $$(document).on('page:init', '.page[data-name="perfil"]', function (e) {
 
   $$('#btnCrearNota').on('click', crearNota);
   $$('#btnGuardarNota').on('click', guardarNota);
+
+  $$('#btnCompras').on('click', mostrarCompra);
+  $$('#btnAgregarCompra').on('click', agregarCompra);
+  $$('#btnGuardarCompra').on('click', guardarCompra);
+
   $$('#btnCrearCumple').on('click', crearCumple);
   $$('#btnGuardarCumple').on('click', guardarCumple);
   $$('#btnCrearPasti').on('click', crearPasti);
@@ -96,6 +101,69 @@ $$(document).on('page:init', '.page[data-name="perfil"]', function (e) {
   mostrarPasti();
   mostrarTurno();
 })
+
+// ----------------------------- FUNCIONES LISTA DE COMPRAS -----------------------------
+
+function mostrarCompra() {
+  const queryListas = firebase.firestore().collection('listas').doc(userEmail);
+  queryListas.get()
+  .then((doc) => {
+    $$('#listaCompraPendiente').html('');
+    doc.data().listaComprar.map((elemento) => {
+    console.log('adentrooooooooooo');
+    console.log(elemento);
+    $$('#listaCompraPendiente').append('<li><label class="item-checkbox item-content"><input type="checkbox" /><i class="icon icon-checkbox"></i>' +
+      '<div class="item-inner"><div class="item-input-wrap"><input type="text" class="elementoCompra" value="' + elemento + '" /><span class="btnEliminarCompra input-clear-button"></span></div></div></label></li>');
+    });
+    $$('.btnEliminarCompra').on('click', eliminarCompra);
+  })
+  .catch((error) => {
+    console.log("Error getting documents: ", error);
+  });
+}
+
+function agregarCompra() {
+  $$('#listaCompraPendiente').append('<li><label class="item-checkbox item-content"><input type="checkbox" /><i class="icon icon-checkbox"></i>' +
+    '<div class="item-inner"><div class="item-input-wrap"><input type="text" class="elementoCompra" /><span class="btnEliminarCompra input-clear-button"></span></div></div></label></li>');
+  $$('.btnEliminarCompra').on('click', eliminarCompra);
+}
+
+function guardarCompra() {
+  var listaporcomprar = [];
+  var listacomprada = [];
+  $$('.elementoCompra').map((elemento) => {
+    listaporcomprar.push(elemento.value);
+  });
+  firebase.firestore().collection('listas').doc(userEmail).set({
+    listaComprar: listaporcomprar,
+    listaComprado: listacomprada
+  });
+}
+
+function eliminarCompra() {
+  var aeliminar = $$(this).prev()[0].defaultValue;
+  var listavieja = [];
+  const queryListas = firebase.firestore().collection('listas').doc(userEmail);
+  queryListas.get()
+  .then((doc) => {
+    listavieja = doc.data().listaComprar;
+    console.log('lista vieja ', listavieja);
+    var listanueva = listavieja.filter((elem) => elem !== aeliminar);
+    firebase.firestore().collection('listas').doc(userEmail).update({
+      listaComprar: listanueva
+    })
+    .then(() => {
+      console.log('lista nueva ', listanueva);
+      mostrarCompra();
+    })
+    .catch((error) => {
+      console.log("Error: " + error);
+    });
+  })
+  .catch((error) => {
+    console.log("Error: " + error);
+  });
+}
 
 // ---------------------------------- FUNCIONES TURNOS ----------------------------------
 

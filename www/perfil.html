@@ -24,7 +24,7 @@
                     +
                 </button>
             </div>
-            <button id="btnCompras" class="button button-fill">🛒 LISTA DE COMPRAS +</button>
+            <button id="btnCompras" class="button button-fill popup-open" data-popup=".listacompras-popup">🛒 LISTA DE COMPRAS +</button>
             <div id="notasTablero" class="row justify-content-space-evenly margin">
                     <!-- Acá van las notas para agregar -->
             </div>
@@ -87,6 +87,34 @@
                 <p>Notificaciones</p>
                 <p>Ajustar cosas</p>
                 <p>Cerrar sesión</p>
+            </div>
+        </div>
+    </div>
+    <!-- ------------------------------------ POPUP LISTA COMPRAS ------------------------------------ -->
+    <div class="popup listacompras-popup">
+        <div class="view">
+            <div class="page">
+                <div class="navbar">
+                    <div class="navbar-bg"></div>
+                    <div class="navbar-inner">
+                        <div class="title">Lista de Compras</div>
+                        <div class="right">
+                            <a id="btnGuardarCompra" class="link popup-close">
+                                <i class="icon icon-back"></i>
+                                <span class="ios-only">Back</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-content">
+                    <div class="block">
+                        <div class="list">
+                            <ul id="listaCompraPendiente">
+                            </ul>
+                        </div>
+                        <button id="btnAgregarCompra" class="button col">+ Agregar elemento</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
