@@ -97,4 +97,37 @@ h3 {
     padding: .3rem 0 .3rem 1.5rem;
     font-weight: bold;
     border-bottom: #ffffff 2px solid;
+    border-radius: .5rem;
+}
+
+.oculto {
+	display: none;
+	visibility: hidden;
+}
+
+.hoyCumple {
+    background-color: #005247;
+    font-weight: bolder;
+    color: #ffffff;
+}
+
+.hoyTurno {
+    background-color: #003749;
+    font-weight: bolder;
+    color: #ffffff;
+}
+
+.poptodosturnos {
+    background-color: #00bbf9;
+}
+
+.poptodoscumples {
+    background-color: #00f5d4;
+}
+
+.btnTodos {
+    width: 20%;
+    font-size: 1rem;
+    font-weight: bolder;
+    color: #dffffa;
 }

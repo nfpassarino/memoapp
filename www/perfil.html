@@ -20,11 +20,11 @@
         <div id="tab-anotador" class="page-content tab">
             <div class="anotador-encabezado">
                 <h1>📝 Notas</h1>
-                <button class="btnCrearNota button popup-open"  data-popup=".crearnota-popup">
+                <button class="btnCrearNota button popup-open"  data-popup=".nota-popup">
                     +
                 </button>
             </div>
-            <button id="btnCompras" class="button button-fill popup-open" data-popup=".listacompras-popup">🛒 LISTA DE COMPRAS +</button>
+            <button class="button button-fill popup-open btnCompra" data-popup=".listacompras-popup">🛒 LISTA DE COMPRAS +</button>
             <div id="notasTablero" class="row justify-content-space-evenly margin">
                     <!-- Acá van las notas para agregar -->
             </div>
@@ -47,7 +47,7 @@
                 <div id="tarjeta-pastillero" class="tarjeta">
                     <div class="tarjeta-encabezado">
                         <h3>💊 Pastillero</h3>
-                        <button class="btnCrear button popup-open"  data-popup=".crearpasti-popup">
+                        <button class="button popup-open btnCrear btnCrearPasti "  data-popup=".pasti-popup">
                             +
                         </button>
                     </div>
@@ -58,7 +58,8 @@
                 <div id="tarjeta-turno" class="tarjeta">
                     <div class="tarjeta-encabezado">
                         <h3>🩺 Turnos</h3>
-                        <button class="btnCrear button popup-open"  data-popup=".crearturno-popup">
+                        <button class="button popup-open btnTurnosTodos btnTodos" data-popup=".turnosanuales-popup">TODOS</button>
+                        <button class="button popup-open btnCrear btnCrearTurno"  data-popup=".turno-popup">
                             +
                         </button>
                     </div>
@@ -69,7 +70,8 @@
                 <div id="tarjeta-cumple" class="tarjeta">
                     <div class="tarjeta-encabezado">
                         <h3>🎂 Cumpleaños</h3>
-                        <button class="btnCrear button popup-open"  data-popup=".crearcumple-popup">
+                        <button class="button popup-open btnCumplesTodos btnTodos" data-popup=".cumplesanuales-popup">TODOS</button>
+                        <button class="button popup-open btnCrear btnCrearCumple"  data-popup=".cumple-popup">
                             +
                         </button>
                     </div>
@@ -90,16 +92,22 @@
             </div>
         </div>
     </div>
-    <!-- ------------------------------------ POPUP LISTA COMPRAS ------------------------------------ -->
-    <div class="popup listacompras-popup">
+    <!-- ------------------------------------ POPUP PASTI ------------------------------------ -->
+    <div class="popup pasti-popup">
         <div class="view">
             <div class="page">
                 <div class="navbar">
                     <div class="navbar-bg"></div>
                     <div class="navbar-inner">
-                        <div class="title">Lista de Compras</div>
+                        <div class="left">
+                            <a id="btnBorrarPasti" class="link popup-close oculto">
+                                <i class="f7-icons">trash</i>
+                                <span class="ios-only">Trash</span>
+                            </a>
+                        </div>
+                        <div class="title">Medicamento</div>
                         <div class="right">
-                            <a id="btnGuardarCompra" class="link popup-close">
+                            <a class="link popup-close btnGuardarPasti">
                                 <i class="icon icon-back"></i>
                                 <span class="ios-only">Back</span>
                             </a>
@@ -109,25 +117,69 @@
                 <div class="page-content">
                     <div class="block">
                         <div class="list">
-                            <ul id="listaCompraPendiente">
+                            <ul>
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-input-wrap">
+                                            <input type="text" placeholder="Medicamento" id="pastiMedicamento" />
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-input-wrap">
+                                            <input type="text" placeholder="Dosis" id="pastiDosis" />
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a class="item-link smart-select smart-select-init my-smart-select" data-open-in="popover">
+                                        <select id="pastiDias" multiple>
+                                            <option value="lunes">Lunes</option>
+                                            <option value="martes">Martes</option>
+                                            <option value="miercoles">Miercoles</option>
+                                            <option value="jueves">Jueves</option>
+                                            <option value="viernes">Viernes</option>
+                                            <option value="sabado">Sábado</option>
+                                            <option value="domingo">Domingo</option>
+                                        </select>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title">Día/s</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-input-wrap">
+                                            <input type="time" placeholder="Horario" id="pastiHorario" />
+                                        </div>
+                                    </div>
+                                </li>
                             </ul>
                         </div>
-                        <button id="btnAgregarCompra" class="button col">+ Agregar elemento</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- ------------------------------------ POPUP CREAR TURNO ------------------------------------ -->
-    <div class="popup crearturno-popup">
+    <!-- ------------------------------------ POPUP TURNO ------------------------------------ -->
+    <div class="popup turno-popup">
         <div class="view">
             <div class="page">
                 <div class="navbar">
                     <div class="navbar-bg"></div>
                     <div class="navbar-inner">
-                        <div class="title">Agendar Turno al Médico</div>
+                        <div class="left">
+                            <a id="btnBorrarTurno" class="link popup-close oculto">
+                                <i class="f7-icons">trash</i>
+                                <span class="ios-only">Trash</span>
+                            </a>
+                        </div>
+                        <div class="title">Turno</div>
                         <div class="right">
-                            <a class="link popup-close">
+                            <a class="link popup-close btnGuardarTurno">
                                 <i class="icon icon-back"></i>
                                 <span class="ios-only">Back</span>
                             </a>
@@ -159,335 +211,130 @@
                                         </div>
                                     </div>
                                 </li>
-                                <li>
-                                    <div class="item-content item-input">
-                                        <div class="item-inner">
-                                            <div class="item-input-wrap">
-                                                <input type="text" placeholder="Día y hora" readonly="readonly" id="turnoCalendar" />
-                                            </div>
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-title item-label">Día y hora</div>
+                                        <div class="item-input-wrap">
+                                            <input type="datetime-local" placeholder="Elija..." id="turnoFecha" />
                                         </div>
                                     </div>
                                 </li>
                             </ul>
                         </div>
-                        <button class="button button-fill popup-close" id="btnCrearTurno">Agendar Turno</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- ------------------------------------ POPUP EDITAR TURNO ------------------------------------ -->
-    <div class="popup editarturno-popup">
+    <!-- ------------------------------------ POPUP TURNOS ANUALES ------------------------------------ -->
+    <div class="popup turnosanuales-popup">
+        <div class="view">
+            <div class="page">
+                <div class="navbar">
+                    <div class="navbar-bg"></div>
+                    <div class="navbar-inner">
+                        <div class="title">Turnos del Año</div>
+                        <div class="right">
+                            <a class="link popup-close">
+                                <i class="icon icon-back"></i>
+                                <span class="ios-only">Back</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-content poptodosturnos">
+                    <div class="block">
+                        <h3>Enero</h3>
+                        <div id="turnos_01" class="row mesesTurnos">
+                            <!-- Enero -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Febrero</h3>
+                        <div id="turnos_02" class="row mesesTurnos">
+                            <!-- Febrero -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Marzo</h3>
+                        <div id="turnos_03" class="row mesesTurnos">
+                            <!-- Marzo -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Abril</h3>
+                        <div id="turnos_04" class="row mesesTurnos">
+                            <!-- Abril -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Mayo</h3>
+                        <div id="turnos_05" class="row mesesTurnos">
+                            <!-- Mayo -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Junio</h3>
+                        <div id="turnos_06" class="row mesesTurnos">
+                            <!-- Junio -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Julio</h3>
+                        <div id="turnos_07" class="row mesesTurnos">
+                            <!-- Julio -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Agosto</h3>
+                        <div id="turnos_08" class="row mesesTurnos">
+                            <!-- Agosto -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Septiembre</h3>
+                        <div id="turnos_09" class="row mesesTurnos">
+                            <!-- Septiembre -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Octubre</h3>
+                        <div id="turnos_10" class="row mesesTurnos">
+                            <!-- Octubre -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Noviembre</h3>
+                        <div id="turnos_11" class="row mesesTurnos">
+                            <!-- Noviembre -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Diciembre</h3>
+                        <div id="turnos_12" class="row mesesTurnos">
+                            <!-- Diciembre -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ------------------------------------ POPUP CUMPLE ------------------------------------ -->
+    <div class="popup cumple-popup">
         <div class="view">
             <div class="page">
                 <div class="navbar">
                     <div class="navbar-bg"></div>
                     <div class="navbar-inner">
                         <div class="left">
-                            <a class="link btnBorrarTurno popup-close">
+                            <a id="btnBorrarCumple" class="link popup-close oculto">
                                 <i class="f7-icons">trash</i>
                                 <span class="ios-only">Trash</span>
                             </a>
                         </div>
+                        <div class="title">Cumpleaños</div>
                         <div class="right">
-                            <a class="link popup-close">
-                                <i class="icon icon-back"></i>
-                                <span class="ios-only">Back</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="page-content">
-                    <div class="block">
-                        <div class="list">
-                            <ul>
-                                <li class="item-content item-input">
-                                    <div class="item-inner">
-                                        <div class="item-input-wrap">
-                                            <input type="text" placeholder="Médico" id="edTurnoMedico" />
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="item-content item-input">
-                                    <div class="item-inner">
-                                        <div class="item-input-wrap">
-                                            <input type="text" placeholder="Lugar" id="edTurnoLugar" />
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="item-content item-input">
-                                    <div class="item-inner">
-                                        <div class="item-input-wrap">
-                                            <textarea class="resizable" placeholder="Consulta..." id="edTurnoConsulta" ></textarea>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="item-content item-input">
-                                        <div class="item-inner">
-                                            <div class="item-input-wrap">
-                                                <input type="text" placeholder="Día y hora" readonly="readonly" id="edTurnoCalendar" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <button class="button button-fill popup-close" id="btnGuardarTurno">Guardar Turno</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ------------------------------------ POPUP CREAR PASTI ------------------------------------ -->
-    <div class="popup crearpasti-popup">
-        <div class="view">
-            <div class="page">
-                <div class="navbar">
-                    <div class="navbar-bg"></div>
-                    <div class="navbar-inner">
-                        <div class="title">Nuevo Medicamento</div>
-                        <div class="right">
-                            <a class="link popup-close">
-                                <i class="icon icon-back"></i>
-                                <span class="ios-only">Back</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="page-content">
-                    <div class="block">
-                        <div class="list">
-                            <ul>
-                                <li class="item-content item-input">
-                                    <div class="item-inner">
-                                        <div class="item-input-wrap">
-                                            <input type="text" placeholder="Medicamento" id="pastiMedicamento" />
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="item-content item-input">
-                                    <div class="item-inner">
-                                        <div class="item-input-wrap">
-                                            <input type="text" placeholder="Dosis" id="pastiDosis" />
-                                        </div>
-                                    </div>
-                                </li>
-                                <div class="block-title">Días</div>
-                                <div class="list">
-                                    <ul>
-                                        <li>
-                                            <label class="item-checkbox item-content">
-                                                <input type="checkbox" name="pastiDias" value="lunes" />
-                                                <i class="icon icon-checkbox"></i>
-                                                <div class="item-inner">
-                                                    <div class="item-title">Lunes</div>
-                                                </div>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="item-checkbox item-content">
-                                                <input type="checkbox" name="pastiDias" value="martes" />
-                                                <i class="icon icon-checkbox"></i>
-                                                <div class="item-inner">
-                                                    <div class="item-title">Martes</div>
-                                                </div>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="item-checkbox item-content">
-                                                <input type="checkbox" name="pastiDias" value="miercoles" />
-                                                <i class="icon icon-checkbox"></i>
-                                                <div class="item-inner">
-                                                    <div class="item-title">Miercoles</div>
-                                                </div>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="item-checkbox item-content">
-                                                <input type="checkbox" name="pastiDias" value="jueves" />
-                                                <i class="icon icon-checkbox"></i>
-                                                <div class="item-inner">
-                                                    <div class="item-title">Jueves</div>
-                                                </div>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="item-checkbox item-content">
-                                                <input type="checkbox" name="pastiDias" value="viernes" />
-                                                <i class="icon icon-checkbox"></i>
-                                                <div class="item-inner">
-                                                    <div class="item-title">Viernes</div>
-                                                </div>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="item-checkbox item-content">
-                                                <input type="checkbox" name="pastiDias" value="sabado" />
-                                                <i class="icon icon-checkbox"></i>
-                                                <div class="item-inner">
-                                                    <div class="item-title">Sábado</div>
-                                                </div>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="item-checkbox item-content">
-                                                <input type="checkbox" name="pastiDias" value="domingo" />
-                                                <i class="icon icon-checkbox"></i>
-                                                <div class="item-inner">
-                                                    <div class="item-title">Domingo</div>
-                                                </div>
-                                            </label>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <li class="item-content item-input">
-                                    <div class="item-inner">
-                                        <div class="item-input-wrap">
-                                            <input type="time" placeholder="Horario" id="pastiHorario" />
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <button class="button button-fill popup-close" id="btnCrearPasti">Agregar Medicamento</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ------------------------------------ POPUP EDITAR PASTI ------------------------------------ -->
-    <div class="popup editarpasti-popup">
-        <div class="view">
-            <div class="page">
-                <div class="navbar">
-                    <div class="navbar-bg"></div>
-                    <div class="navbar-inner">
-                        <div class="left">
-                            <a class="link btnBorrarPasti popup-close">
-                                <i class="f7-icons">trash</i>
-                                <span class="ios-only">Trash</span>
-                            </a>
-                        </div>
-                        <div class="right">
-                            <a class="link popup-close">
-                                <i class="icon icon-back"></i>
-                                <span class="ios-only">Back</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="page-content">
-                    <div class="block">
-                        <div class="list">
-                            <ul>
-                                <li class="item-content item-input">
-                                    <div class="item-inner">
-                                        <div class="item-input-wrap">
-                                            <input type="text" placeholder="Medicamento" id="edPastiMedicamento" />
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="item-content item-input">
-                                    <div class="item-inner">
-                                        <div class="item-input-wrap">
-                                            <input type="text" placeholder="Dosis" id="edPastiDosis" />
-                                        </div>
-                                    </div>
-                                </li>
-                                <div class="block-title">Días</div>
-                                <div class="list">
-                                    <ul>
-                                        <li>
-                                            <label class="item-checkbox item-content">
-                                                <input type="checkbox" name="edPastiDias" value="lunes" />
-                                                <i class="icon icon-checkbox"></i>
-                                                <div class="item-inner">
-                                                    <div class="item-title">Lunes</div>
-                                                </div>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="item-checkbox item-content">
-                                                <input type="checkbox" name="edPastiDias" value="martes" />
-                                                <i class="icon icon-checkbox"></i>
-                                                <div class="item-inner">
-                                                    <div class="item-title">Martes</div>
-                                                </div>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="item-checkbox item-content">
-                                                <input type="checkbox" name="edPastiDias" value="miercoles" />
-                                                <i class="icon icon-checkbox"></i>
-                                                <div class="item-inner">
-                                                    <div class="item-title">Miercoles</div>
-                                                </div>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="item-checkbox item-content">
-                                                <input type="checkbox" name="edPastiDias" value="jueves" />
-                                                <i class="icon icon-checkbox"></i>
-                                                <div class="item-inner">
-                                                    <div class="item-title">Jueves</div>
-                                                </div>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="item-checkbox item-content">
-                                                <input type="checkbox" name="edPastiDias" value="viernes" />
-                                                <i class="icon icon-checkbox"></i>
-                                                <div class="item-inner">
-                                                    <div class="item-title">Viernes</div>
-                                                </div>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="item-checkbox item-content">
-                                                <input type="checkbox" name="edPastiDias" value="sabado" />
-                                                <i class="icon icon-checkbox"></i>
-                                                <div class="item-inner">
-                                                    <div class="item-title">Sábado</div>
-                                                </div>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="item-checkbox item-content">
-                                                <input type="checkbox" name="edPastiDias" value="domingo" />
-                                                <i class="icon icon-checkbox"></i>
-                                                <div class="item-inner">
-                                                    <div class="item-title">Domingo</div>
-                                                </div>
-                                            </label>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <li class="item-content item-input">
-                                    <div class="item-inner">
-                                        <div class="item-input-wrap">
-                                            <input type="time" placeholder="Horario" id="edPastiHorario" />
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <button class="button button-fill popup-close" id="btnGuardarPasti">Editar Medicamento</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ------------------------------------ POPUP CREAR CUMPLE ------------------------------------ -->
-    <div class="popup crearcumple-popup">
-        <div class="view">
-            <div class="page">
-                <div class="navbar">
-                    <div class="navbar-bg"></div>
-                    <div class="navbar-inner">
-                        <div class="title">Nuevo Cumpleaños</div>
-                        <div class="right">
-                            <a class="link popup-close">
+                            <a class="link popup-close btnGuardarCumple">
                                 <i class="icon icon-back"></i>
                                 <span class="ios-only">Back</span>
                             </a>
@@ -512,38 +359,153 @@
                                         </div>
                                     </div>
                                 </li>
-                                <li>
-                                    <div class="item-content item-input">
-                                        <div class="item-inner">
-                                            <div class="item-input-wrap">
-                                                <input type="text" placeholder="Seleccione la fecha" readonly="readonly" id="cumpleCalendar" />
-                                            </div>
+                                <li class="item-content item-input">
+                                    <div class="item-inner">
+                                        <div class="item-title item-label">Cumpleaños</div>
+                                        <div class="item-input-wrap">
+                                            <input type="date" placeholder="Elija..." id="cumpleFecha" />
                                         </div>
                                     </div>
                                 </li>
                             </ul>
                         </div>
-                        <button class="button button-fill popup-close" id="btnCrearCumple">Agendar Cumpleaños</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- ------------------------------------ POPUP EDITAR CUMPLE ------------------------------------ -->
-    <div class="popup editarcumple-popup">
+    <!-- ------------------------------------ POPUP CUMPLES ANUALES ------------------------------------ -->
+    <div class="popup cumplesanuales-popup">
         <div class="view">
             <div class="page">
                 <div class="navbar">
                     <div class="navbar-bg"></div>
                     <div class="navbar-inner">
-                        <div class="left">
-                            <a class="link btnBorrarCumple popup-close">
-                                <i class="f7-icons">trash</i>
-                                <span class="ios-only">Trash</span>
-                            </a>
-                        </div>
+                        <div class="title">Cumples del Año</div>
                         <div class="right">
                             <a class="link popup-close">
+                                <i class="icon icon-back"></i>
+                                <span class="ios-only">Back</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-content poptodoscumples">
+                    <div class="block">
+                        <h3>Enero</h3>
+                        <div id="cumples_01" class="row mesesCumples">
+                            <!-- Enero -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Febrero</h3>
+                        <div id="cumples_02" class="row mesesCumples">
+                            <!-- Febrero -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Marzo</h3>
+                        <div id="cumples_03" class="row mesesCumples">
+                            <!-- Marzo -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Abril</h3>
+                        <div id="cumples_04" class="row mesesCumples">
+                            <!-- Abril -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Mayo</h3>
+                        <div id="cumples_05" class="row mesesCumples">
+                            <!-- Mayo -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Junio</h3>
+                        <div id="cumples_06" class="row mesesCumples">
+                            <!-- Junio -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Julio</h3>
+                        <div id="cumples_07" class="row mesesCumples">
+                            <!-- Julio -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Agosto</h3>
+                        <div id="cumples_08" class="row mesesCumples">
+                            <!-- Agosto -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Septiembre</h3>
+                        <div id="cumples_09" class="row mesesCumples">
+                            <!-- Septiembre -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Octubre</h3>
+                        <div id="cumples_10" class="row mesesCumples">
+                            <!-- Octubre -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Noviembre</h3>
+                        <div id="cumples_11" class="row mesesCumples">
+                            <!-- Noviembre -->
+                        </div>
+                    </div>
+                    <div class="block">
+                        <h3>Diciembre</h3>
+                        <div id="cumples_12" class="row mesesCumples">
+                            <!-- Diciembre -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ------------------------------------ POPUP LISTA COMPRAS ------------------------------------ -->
+    <div class="popup listacompras-popup">
+        <div class="view">
+            <div class="page">
+                <div class="navbar">
+                    <div class="navbar-bg"></div>
+                    <div class="navbar-inner">
+                        <div class="title">Lista de Compras</div>
+                        <div class="right">
+                            <a class="link popup-close">
+                                <i class="icon icon-back"></i>
+                                <span class="ios-only">Back</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-content">
+                    <div class="block">
+                        <div class="list">
+                            <ul id="compraTablero">
+                                <!-- LISTA DE COSAS A COMPRAR -->
+                            </ul>
+                        </div>
+                        <button class="button col popup-open btnAgregarCompra" data-popup=".compra-popup">+ Agregar elemento</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ------------------------------------ POPUP AGREGAR COMPRA ------------------------------------ -->
+    <div class="popup compra-popup">
+        <div class="view">
+            <div class="page">
+                <div class="navbar">
+                    <div class="navbar-bg"></div>
+                    <div class="navbar-inner">
+                        <div class="title">Compra</div>
+                        <div class="right">
+                            <a class="link popup-close btnGuardarCompra">
                                 <i class="icon icon-back"></i>
                                 <span class="ios-only">Back</span>
                             </a>
@@ -557,44 +519,33 @@
                                 <li class="item-content item-input">
                                     <div class="item-inner">
                                         <div class="item-input-wrap">
-                                            <input type="text" placeholder="Nombre" id="edCumpleNombre" />
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="item-content item-input">
-                                    <div class="item-inner">
-                                        <div class="item-input-wrap">
-                                            <input type="text" placeholder="Parentezco/Relación" id="edCumpleRelacion" />
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="item-content item-input">
-                                        <div class="item-inner">
-                                            <div class="item-input-wrap">
-                                                <input type="text" placeholder="Seleccione la fecha" readonly="readonly" id="edCumpleCalendar" />
-                                            </div>
+                                            <input type="text" placeholder="Compra..." id="compraObjeto" />
                                         </div>
                                     </div>
                                 </li>
                             </ul>
                         </div>
-                        <button class="button button-fill popup-close" id="btnGuardarCumple">Editar Cumpleaños</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- ------------------------------------ POPUP CREAR NOTA ------------------------------------ -->
-    <div class="popup crearnota-popup">
+    <!-- ------------------------------------ POPUP NOTA ------------------------------------ -->
+    <div class="popup nota-popup">
         <div class="view">
             <div class="page">
                 <div class="navbar">
                     <div class="navbar-bg"></div>
                     <div class="navbar-inner">
-                        <div class="title">Nueva Nota</div>
+                        <div class="left">
+                            <a id="btnBorrarNota" class="link popup-close oculto">
+                                <i class="f7-icons">trash</i>
+                                <span class="ios-only">Trash</span>
+                            </a>
+                        </div>
+                        <div class="title">Nota</div>
                         <div class="right">
-                            <a class="link popup-close">
+                            <a class="link popup-close btnGuardarNota">
                                 <i class="icon icon-back"></i>
                                 <span class="ios-only">Back</span>
                             </a>
@@ -621,54 +572,6 @@
                                 </li>
                             </ul>
                         </div>
-                        <button class="button button-fill popup-close" id="btnCrearNota">Agregar nota</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ------------------------------------ POPUP EDITAR NOTA ------------------------------------ -->
-    <div class="popup editarnota-popup">
-        <div class="view">
-            <div class="page">
-                <div class="navbar">
-                    <div class="navbar-bg"></div>
-                    <div class="navbar-inner">
-                        <div class="left">
-                            <a class="link btnBorrarNota popup-close">
-                                <i class="f7-icons">trash</i>
-                                <span class="ios-only">Trash</span>
-                            </a>
-                        </div>
-                        <div class="right">
-                            <a class="link popup-close">
-                                <i class="icon icon-back"></i>
-                                <span class="ios-only">Back</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="page-content">
-                    <div class="block">
-                        <div class="list">
-                            <ul>
-                                <li class="item-content item-input">
-                                    <div class="item-inner">
-                                        <div class="item-input-wrap">
-                                            <input type="text" placeholder="Título" id="edNotaTitulo" />
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="item-content item-input">
-                                    <div class="item-inner">
-                                        <div class="item-input-wrap">
-                                            <textarea class="resizable" placeholder="Nota" id="edNotaContenido" ></textarea>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <button class="button button-fill popup-close" id="btnGuardarNota">Editar nota</button>
                     </div>
                 </div>
             </div>
