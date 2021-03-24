@@ -48,6 +48,9 @@ function loguearUsuario() {
 
 $$(document).on('page:init', '.page[data-name="perfil"]', function (e) {
 
+    $$('#btnCamara').on('click', activarCamaraOCR);
+    $$('#btnGaleria').on('click', activarGaleriaOCR);
+
     $$('.btnCrearNota').on('click', crearNota);
     $$('.btnGuardarNota').on('click', guardarNota);
     $$('.btnCompra').on('click', mostrarCompra);
@@ -489,5 +492,59 @@ var hs = dia.getHours();
 var min = dia.getMinutes();
 var sec = dia.getSeconds();
 if (hs === 0 && min === 0 && sec < 60) {
-  //refrescar pantalla
+    //refrescar pantalla
 }*/
+
+// ---------------------------------- LECTOR OCR ----------------------------------
+
+function activarCamaraOCR() {
+    navigator.camera.getPicture(onSuccessCamara, onFailCamara, { quality: 100, correctOrientation: true });
+}
+
+function activarGaleriaOCR() {
+    navigator.camera.getPicture(onSuccessCamara, onFailCamara,
+        {
+            quality: 100,
+            correctOrientation: true,
+            sourceType: Camera.PictureSourceType.PHOTOLIBRARY
+        }
+    );
+}
+
+function onSuccessCamara(imageData) {
+    textocr.recText(0, imageData, onSuccessOCR, onFailOCR);
+    function onSuccessOCR(recognizedText) {
+        if(recognizedText.foundText) {
+            $$('#txtOCR').text(recognizedText.blocks.blocktext);
+        } else {
+            console.log('No encontró texto :(');
+        }
+    }
+    function onFailOCR(message) {
+        console.log('Error OCR: ' + message);
+    }
+}
+
+function onFailCamara(message) {
+    console.log('Error de cámara/galería: ' + message);
+}
+
+var onSuccessGEO = function(position) {
+    alert('Latitude: '          + position.coords.latitude          + '\n' +
+          'Longitude: '         + position.coords.longitude         + '\n' +
+          'Altitude: '          + position.coords.altitude          + '\n' +
+          'Accuracy: '          + position.coords.accuracy          + '\n' +
+          'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+          'Heading: '           + position.coords.heading           + '\n' +
+          'Speed: '             + position.coords.speed             + '\n' +
+          'Timestamp: '         + position.timestamp                + '\n');
+};
+
+// onError Callback receives a PositionError object
+//
+function onErrorGEO(error) {
+    alert('code: '    + error.code    + '\n' +
+          'message: ' + error.message + '\n');
+}
+
+navigator.geolocation.getCurrentPosition(onSuccessGEO, onErrorGEO);

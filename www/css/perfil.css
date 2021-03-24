@@ -35,7 +35,7 @@
     margin-top: .5rem;
 }
 
-#btnBinoculares {
+#btnLector {
     width: 50%;
     height: 50%;
     margin-top: .5rem;
@@ -130,4 +130,9 @@ h3 {
     font-size: 1rem;
     font-weight: bolder;
     color: #dffffa;
+}
+
+#txtOCR {
+    text-transform: uppercase;
+    font-size: 2rem;
 }

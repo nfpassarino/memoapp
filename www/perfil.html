@@ -26,7 +26,7 @@
             </div>
             <button class="button button-fill popup-open btnCompra" data-popup=".listacompras-popup">🛒 LISTA DE COMPRAS +</button>
             <div id="notasTablero" class="row justify-content-space-evenly margin">
-                    <!-- Acá van las notas para agregar -->
+                <!-- Acá van las notas para agregar -->
             </div>
         </div>
         <!-- ------------------------------------ TAB INICIO ------------------------------------ -->
@@ -39,9 +39,9 @@
                 </div>
             </div>
             <div class="botonera">
-                <button id="btnSOS" class="button button-fill">S O S</button>
+                <a href="whatsapp://send?text=http%3A%2F%2Fmaps.google.com%2Fmaps%3Fq%3D24.197611%2C120.780512&phone=+5493415690372" id="btnSOS" class="button button-fill">S O S</a>
                 <button id="btnMEMO" class="button button-fill">MEMO</button>
-                <button id="btnBinoculares" class="button button-fill">Binoculares</button>
+                <button id="btnLector" class="button button-fill popup-open" data-popup=".lector-popup">Lector</button>
             </div>
             <div class="tarjetaTablero">
                 <div id="tarjeta-pastillero" class="tarjeta">
@@ -89,6 +89,36 @@
                 <p>Notificaciones</p>
                 <p>Ajustar cosas</p>
                 <p>Cerrar sesión</p>
+            </div>
+        </div>
+    </div>
+    <!-- ------------------------------------ POPUP LECTOR ------------------------------------ -->
+    <div class="popup lector-popup">
+        <div class="view">
+            <div class="page">
+                <div class="navbar">
+                    <div class="navbar-bg"></div>
+                    <div class="navbar-inner">
+                        <div class="title">Lector</div>
+                        <div class="right">
+                            <a class="link popup-close">
+                                <i class="icon icon-back"></i>
+                                <span class="ios-only">Back</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-content">
+                    <div class="block">
+                        <div class="row">
+                            <button class="col button button-outline button-round button-raised" id="btnGaleria">GALERIA</button>
+                            <button class="col button button-outline button-round button-raised" id="btnCamara">CAMARA</button>
+                        </div>
+                        <div class="row">
+                            <p id="txtOCR"></p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
