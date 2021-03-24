@@ -50,6 +50,7 @@ $$(document).on('page:init', '.page[data-name="perfil"]', function (e) {
 
     $$('#btnCamara').on('click', activarCamaraOCR);
     $$('#btnGaleria').on('click', activarGaleriaOCR);
+    $$('#btnSOS').on('click', mandarSOS);
 
     $$('.btnCrearNota').on('click', crearNota);
     $$('.btnGuardarNota').on('click', guardarNota);
@@ -71,6 +72,23 @@ $$(document).on('page:init', '.page[data-name="perfil"]', function (e) {
     mostrarCumple();
     mostrarNota();
 });
+
+function mandarSOS() {
+    var latitude = 0;
+    var longitude = 0;
+    function onSuccessGEO(position) {
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+        window.plugins.socialsharing.share('NECESITO AYUDA URGENTE, ESTA ES MI UBICACIÓN', null, null,
+        'http://maps.google.com/maps?q=' + latitude + ',' + longitude);
+    };
+
+    function onErrorGEO(error) {
+        console.log('errorGEO code: '    + error.code    + '\n' +
+                    'message: ' + error.message + '\n');
+    }
+    navigator.geolocation.getCurrentPosition(onSuccessGEO, onErrorGEO);
+}
 
 // ---------------------------------- FUNCIONES ANOTADOR ----------------------------------
 function mostrarNota() {
@@ -528,23 +546,3 @@ function onSuccessCamara(imageData) {
 function onFailCamara(message) {
     console.log('Error de cámara/galería: ' + message);
 }
-
-var onSuccessGEO = function(position) {
-    alert('Latitude: '          + position.coords.latitude          + '\n' +
-          'Longitude: '         + position.coords.longitude         + '\n' +
-          'Altitude: '          + position.coords.altitude          + '\n' +
-          'Accuracy: '          + position.coords.accuracy          + '\n' +
-          'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
-          'Heading: '           + position.coords.heading           + '\n' +
-          'Speed: '             + position.coords.speed             + '\n' +
-          'Timestamp: '         + position.timestamp                + '\n');
-};
-
-// onError Callback receives a PositionError object
-//
-function onErrorGEO(error) {
-    alert('code: '    + error.code    + '\n' +
-          'message: ' + error.message + '\n');
-}
-
-navigator.geolocation.getCurrentPosition(onSuccessGEO, onErrorGEO);
