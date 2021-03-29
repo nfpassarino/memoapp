@@ -95,16 +95,12 @@
     "plugins": {
       "cordova-plugin-whitelist": {},
       "cordova-plugin-browsersync-gen2": {},
-      "cordova-plugin-camera": {
-        "ANDROID_SUPPORT_V4_VERSION": "27.+"
-      },
+      "cordova-plugin-camera": {},
       "cordova-plugin-file": {},
       "cordova-plugin-mobile-ocr": {},
       "cordova-plugin-androidx": {},
       "cordova-plugin-androidx-adapter": {},
-      "cordova-plugin-geolocation": {
-        "GPS_REQUIRED": "true"
-      },
+      "cordova-plugin-geolocation": {},
       "cordova-plugin-x-socialsharing": {}
     },
     "platforms": [

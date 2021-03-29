@@ -1,15 +1,12 @@
 #tarjetaSaludo {
     display: flex;
     justify-content: center;
+    align-items: center;
     margin: 1rem;
     padding: .5rem;
     background: linear-gradient(120deg, rgba(255,99,71,1) 0%, rgba(255,192,74,1) 100%);
     border-radius: .5rem;
     box-shadow: 0px 0px 22px 2px rgba(0,0,0,0.3);
-}
-
-#tarjetaSaludo > .col {
-    height: 100%;
 }
 
 #cantidadPasosSaludo {
@@ -18,27 +15,20 @@
 }
 
 .botonera {
-    height: 8%;
-    margin: 0 1rem .5rem 1rem;
     display: flex;
     flex-flow: row wrap;
 }
 
 #btnSOS {
-    width: 100%;
-    height: 50%;
-}
-
-#btnMEMO {
-    width: 50%;
-    height: 50%;
-    margin-top: .5rem;
+    margin: .2rem;
+    width: 40%;
+    background-color: #ef476f;
 }
 
 #btnLector {
-    width: 50%;
-    height: 50%;
-    margin-top: .5rem;
+    margin: .2rem;
+    width: 40%;
+    background-color: #06d6a0;
 }
 
 .tarjetaTablero {
@@ -135,4 +125,22 @@ h3 {
 #txtOCR {
     text-transform: uppercase;
     font-size: 2rem;
+}
+
+.subtitulo {
+    border-bottom: 2px solid #1b1b1b;
+}
+
+#pastiTablero {
+    width: 100%;
+}
+
+.imgContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#imgPerfil {
+    width: 100%;
 }
