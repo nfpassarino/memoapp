@@ -32,7 +32,7 @@ function registrarUsuario() {
     const pass = $$(passReg).val();
     firebase.auth().createUserWithEmailAndPassword(email, pass)
         .then((user) => app.loginScreen.close($$('.register'), true))
-        .catch((error) => console.log('Error registro: ' + error.message + ' [' + error.code + ']'));
+        .catch((error) => console.error('Error registro: ' + error.message + ' [' + error.code + ']'));
 }
 
 function loguearUsuario() {
@@ -44,10 +44,10 @@ function loguearUsuario() {
         app.loginScreen.close($$('.login'), true);
         router.navigate('/perfil/');
     })
-    .catch((error) => console.log('Error registro: ' + error.message + ' [' + error.code + ']'));
+    .catch((error) => console.error('Error registro: ' + error.message + ' [' + error.code + ']'));
 }
 
-// ---------------------------------- PERFIL ----------------------------------
+// ---------------------------------- HOME ----------------------------------
 
 $$(document).on('page:init', '.page[data-name="perfil"]', function (e) {
     var url="https://ws.smn.gob.ar/map_items/forecast/1";
@@ -70,6 +70,7 @@ $$(document).on('page:init', '.page[data-name="perfil"]', function (e) {
     $$('.btnAgregarCompra').on('click', crearCompra);
     $$('.btnGuardarCompra').on('click', guardarCompra);
 
+    $$('.btnPastiTodos').on('click', mostrarPastiSemana);
     $$('.btnCrearPasti').on('click', crearPasti);
     $$('.btnGuardarPasti').on('click', guardarPasti);
     $$('.btnTurnosTodos').on('click', mostrarTodosTurnos);
@@ -80,13 +81,30 @@ $$(document).on('page:init', '.page[data-name="perfil"]', function (e) {
     $$('.btnGuardarCumple').on('click', guardarCumple);
 
     $$('.toggle').on('toggle:change', cambiarToma);
+    $$('#btnCerrarSesion').on('click', logOut);
 
     actualizarTableroPastis();
+    actualizarSemanaPastis();
     mostrarPasti();
     mostrarTurno();
     mostrarCumple();
     mostrarNota();
 });
+
+// ---------------------------------- PERFIL ----------------------------------
+function logOut() {
+    if (firebase.auth().currentUser) {
+        firebase.auth().signOut()
+            .then(() => {
+                mainView.router.navigate('/');
+            })
+            .catch((error) => {
+                console.error('error CerrarSesión: ' + error);
+            });
+    } else {
+        console.log('Ya cerré sesion');
+    }
+}
 
 // ---------------------------------- FUNCIONES SOS ----------------------------------
 function mandarSOS() {
@@ -100,7 +118,7 @@ function mandarSOS() {
     };
 
     function onErrorGEO(error) {
-        console.log('errorGEO code: '    + error.code    + '\n' +
+        console.error('errorGEO code: '    + error.code    + '\n' +
                     'message: ' + error.message + '\n');
     }
     navigator.geolocation.getCurrentPosition(onSuccessGEO, onErrorGEO);
@@ -127,16 +145,16 @@ function onSuccessCamara(imageData) {
         if(recognizedText.foundText) {
             $$('#txtOCR').text(recognizedText.blocks.blocktext);
         } else {
-            console.log('No encontró texto :(');
+            console.error('No encontró texto :(');
         }
     }
     function onFailOCR(message) {
-        console.log('Error OCR: ' + message);
+        console.error('Error OCR: ' + message);
     }
 }
 
 function onFailCamara(message) {
-    console.log('Error de cámara/galería: ' + message);
+    console.error('Error de cámara/galería: ' + message);
 }
 
 // ---------------------------------- FUNCIONES ANOTADOR ----------------------------------
@@ -155,7 +173,7 @@ function mostrarNota() {
         });
         $$('.btnEditarNota').on('click', cargarNota);
     })
-    .catch((error) => console.log("Error mostrarNotas: ", error));
+    .catch((error) => console.error("Error mostrarNotas: ", error));
 }
 
 function crearNota() {
@@ -238,7 +256,7 @@ function mostrarCompra() {
         });
     $$('.btnBorrarCompra').on('click', borrarCompra);
     })
-    .catch((error) => console.log("Error mostrarCompra: ", error));
+    .catch((error) => console.error("Error mostrarCompra: ", error));
 }
 
 function crearCompra() {
@@ -317,13 +335,32 @@ function actualizarTableroPastis() {
     var diaSemanaHoy = diaHoy.getDay();
     var fechaParcial, fechaID;
     semanaPastillero = [];
-    for (var i = 0; i < 2; i++) {
+    for (var i = 0; i < 1; i++) {
         fechaParcial = sumarDias(diaHoy, i);
         fechaID = String(fechaParcial.getFullYear()) + String(fechaParcial.getMonth() + 1) + String(fechaParcial.getDate());
         semanaPastillero.push(fechaID);
         $$('#pastiTablero').append(`
-            <h3 class="subtitulo col-100">${(i === 0) ? 'HOY' : 'MAÑANA'}</h3>
+            <h3 class="subtitulo col-100">HOY</h3>
             <div id="${fechaID}" class="col-100 dia dia${diaSemanaHoy + i}">
+                <!-- Medicamentos -->
+            </div>
+        `);
+    }
+}
+
+function actualizarSemanaPastis() {
+    $$('.popsemanapastis').html('');
+    var diaHoy = new Date();
+    var diaSemanaHoy = diaHoy.getDay();
+    var fechaParcial, fechaID;
+    semanaPastillero = [];
+    for (var i = 0; i < 7; i++) {
+        fechaParcial = sumarDias(diaHoy, i);
+        fechaID = String(fechaParcial.getFullYear()) + String(fechaParcial.getMonth() + 1) + String(fechaParcial.getDate());
+        semanaPastillero.push(fechaID);
+        $$('.popsemanapastis').append(`
+            <h3 class="subtitulo col-100">${mostrarDiaSemana((diaSemanaHoy + i) % 7)}</h3>
+            <div id="semana${fechaID}" class="col-100 semana semana${(diaSemanaHoy + i) % 7}">
                 <!-- Medicamentos -->
             </div>
         `);
@@ -337,28 +374,53 @@ function limpiarSemana() {
 function mostrarPasti() {
     firebase.firestore().collection('medicamentos').where('pastiEmail', '==', userEmail).orderBy('pastiHorario').get()
     .then((querySnapshot) => {
-        console.log('hola total');
         limpiarSemana();
         querySnapshot.forEach((doc) => {
             if (doc.data().pastiToma) {
                 if (semanaPastillero.includes(doc.data().pastiFecha)) {
                     $$('.dia' + doc.data().pastiDia).append(`
                         <div id="${doc.id}" class="pastis col-100 popup-open pastiEventual btnEditarPasti" data-popup=".pasti-popup">
-                            ${doc.data().pastiHorario} ${doc.data().pastiMedicamento}  [${doc.data().pastiDosis}]
+                            ${doc.data().pastiHorario}  |  ${doc.data().pastiMedicamento} [${doc.data().pastiDosis}]
                         </div>
                     `);
                 }
             } else {
                 $$('.dia' + doc.data().pastiDia).append(`
                     <div id="${doc.id}" class="pastis col-100 popup-open btnEditarPasti" data-popup=".pasti-popup">
-                        ${doc.data().pastiHorario} ${doc.data().pastiMedicamento}  [${doc.data().pastiDosis}]
+                        ${doc.data().pastiHorario}  |  ${doc.data().pastiMedicamento}  [${doc.data().pastiDosis}]
                     </div>
                 `);
             }
         });
         $$('.btnEditarPasti').on('click', cargarPasti);
     })
-    .catch((error) => console.log("Error mostrarPasti: ", error));
+    .catch((error) => console.error("Error mostrarPasti: ", error));
+}
+
+function mostrarPastiSemana() {
+    firebase.firestore().collection('medicamentos').where('pastiEmail', '==', userEmail).orderBy('pastiHorario').get()
+    .then((querySnapshot) => {
+        $$('.semana').html('');
+        querySnapshot.forEach((doc) => {
+            if (doc.data().pastiToma) {
+                if (semanaPastillero.includes(doc.data().pastiFecha)) {
+                    $$('.semana' + doc.data().pastiDia).append(`
+                        <div id="${doc.id}" class="pastis col-100 popup-open pastiEventual btnEditarPasti" data-popup=".pasti-popup">
+                            ${doc.data().pastiHorario}  |  ${doc.data().pastiMedicamento} [${doc.data().pastiDosis}]
+                        </div>
+                    `);
+                }
+            } else {
+                $$('.semana' + doc.data().pastiDia).append(`
+                    <div id="${doc.id}" class="pastis col-100 popup-open btnEditarPasti" data-popup=".pasti-popup">
+                        ${doc.data().pastiHorario}  |  ${doc.data().pastiMedicamento} [${doc.data().pastiDosis}]
+                    </div>
+                `);
+            }
+        });
+        $$('.btnEditarPasti').on('click', cargarPasti);
+    })
+    .catch((error) => console.error("Error mostrarPasti: ", error));
 }
 
 function crearPasti() {
@@ -376,50 +438,30 @@ function crearPasti() {
 }
 
 function cargarPasti() {
+    $$('.pastiToma').addClass('oculto');
     capturabtn = 'editar';
     $$('#btnBorrarPasti').removeClass('oculto').on('click', borrarPasti);
     $$('#pastiMedicamento').val('');
     $$('#pastiDosis').val('');
-    $$('#pastiHorario').val('');
-    app.smartSelect.get('.my-smart-select').setValue([]);
-    $$('#pastiInicio').val('');
-    $$('#pastiCantidad').val('1');
-    $$('#pastiHoras').val('8');
     idparaeditar = this.id;
-    console.log(this);
-    const EventualFlag = this.classList.contains('pastiEventual');
-    if (EventualFlag) {
-        $$('.pastiToma').addClass('oculto');
-    } else {
-        $$('.pastiToma').removeClass('oculto');
-        $$('.tomaEventual').addClass('oculto');
-    }
     firebase.firestore().collection('medicamentos').doc(idparaeditar).get()
     .then((doc) => {
         $$('#pastiMedicamento').val(doc.data().pastiMedicamento);
         $$('#pastiDosis').val(doc.data().pastiDosis);
-        if (!EventualFlag) {
-            $$('#pastiHorario').val(doc.data().pastiHorario);
-            doc.data().pastiDias.map((pastidia) => {
-                $$('option[value="' + pastidia + '"]').prop('selected', true);
-            });
-        }
     })
     .catch((error) => {
-        console.log("Error cargarPasti: ", error);
+        console.error("Error cargarPasti: ", error);
     });
 }
 
 function guardarPasti() {
     const medicamento = $$('#pastiMedicamento').val();
     const dosis = $$('#pastiDosis').val();
-    console.log('pastiToma ', pastiToma);
     if (!pastiToma) {
         const horario = $$('#pastiHorario').val();
         const dias = app.smartSelect.get('.my-smart-select').getValue();
-        dias.map((dia) => {
-            if (medicamento && dias && capturabtn === 'crear') {
-                console.log('guardar diario');
+        if (medicamento && dias && capturabtn === 'crear') {
+            dias.map((dia) => {
                 firebase.firestore().collection('medicamentos').add({
                     pastiEmail: userEmail,
                     pastiToma: pastiToma,
@@ -428,20 +470,17 @@ function guardarPasti() {
                     pastiHorario: horario,
                     pastiDia: Number(dia)
                 })
-                .then(() => mostrarPasti())
+                .then(() => { mostrarPasti(); mostrarPastiSemana() })
                 .catch((error) => console.error("Error guardarPasti para crear: ", error));
-            } else if (medicamento && dias && capturabtn === 'editar') {
-                firebase.firestore().collection('medicamentos').doc(idparaeditar).update({
-                    pastiToma: pastiToma,
-                    pastiMedicamento: medicamento,
-                    pastiDosis: dosis,
-                    pastiHorario: horario,
-                    pastiDia: Number(dia)
-                })
-                .then(() => mostrarPasti())
-                .catch((error) => console.error("Error guardarPasti para editar: ", error));
-            }
-        });
+            });
+        } else if (medicamento && dosis && capturabtn === 'editar') {
+            firebase.firestore().collection('medicamentos').doc(idparaeditar).update({
+                pastiMedicamento: medicamento,
+                pastiDosis: dosis,
+            })
+            .then(() => { mostrarPasti(); mostrarPastiSemana() })
+            .catch((error) => console.error("Error guardarPasti para editar: ", error));
+        }
     } else {
         var fechaPastiMS = 0;
         var fechaPastiCompleta, horaPasti, diaSemana, hora, minutos;
@@ -456,7 +495,6 @@ function guardarPasti() {
         const min = horaInicio.split(':')[1];
         const fechaNueva = new Date(año, Number(mes) - 1, dia, hs, min);
         const fechaInicialMS = fechaNueva.getTime();
-        console.log('fechaInicialMS ', fechaInicialMS);
         if (medicamento && fechaInicio && cantidad && horas && capturabtn === 'crear') {
             for (var i = 0; i < cantidad; i++) {
                 fechaPastiMS = 0;
@@ -466,7 +504,6 @@ function guardarPasti() {
                 (String(fechaPastiCompleta.getHours()).length === 1) ? hora = '0' + String(fechaPastiCompleta.getHours()) : hora = String(fechaPastiCompleta.getHours());
                 (String(fechaPastiCompleta.getMinutes()).length === 1) ? minutos = '0' + String(fechaPastiCompleta.getMinutes()) : minutos = String(fechaPastiCompleta.getMinutes());
                 horaPasti = hora + ':' + minutos;
-                console.log('guardar eventual');
                 firebase.firestore().collection('medicamentos').add({
                     pastiEmail: userEmail,
                     pastiToma: pastiToma,
@@ -476,16 +513,23 @@ function guardarPasti() {
                     pastiDia: diaSemana,
                     pastiFecha: String(fechaPastiCompleta.getFullYear()) + String(fechaPastiCompleta.getMonth() + 1) + String(fechaPastiCompleta.getDate())
                 })
-                .then(() => mostrarPasti())
+                .then(() => { mostrarPasti(); mostrarPastiSemana() })
                 .catch((error) => console.error("Error guardarPasti para crear: ", error));
             }
+        } else if (medicamento && dosis && capturabtn === 'editar') {
+            firebase.firestore().collection('medicamentos').doc(idparaeditar).update({
+                pastiMedicamento: medicamento,
+                pastiDosis: dosis,
+            })
+            .then(() => { mostrarPasti(); mostrarPastiSemana() })
+            .catch((error) => console.error("Error guardarPasti para editar: ", error));
         }
     }
 }
 
 function borrarPasti() {
     firebase.firestore().collection('medicamentos').doc(idparaeditar).delete()
-    .then(() => mostrarPasti())
+    .then(() => { mostrarPasti(); mostrarPastiSemana() })
     .catch((error) => console.error("Error borrarPasti: ", error));
 }
 
@@ -506,13 +550,13 @@ function mostrarTurno() {
             $$('#turnoTablero').append(`
                 <div id="${doc.id}" class="turnos col-100 row popup-open btnEditarTurno
                 ${(doc.data().turnoFecha.split('T')[0].split('-')[2] === diaActual) ? 'hoyTurno' : ''}" data-popup=".turno-popup">
-                    ${doc.data().turnoFecha.split('T')[0]} ${doc.data().turnoFecha.split('T')[1]}  ${doc.data().turnoMedico}
+                    ${doc.data().turnoFecha.split('T')[0].split('-')[2]}/${doc.data().turnoFecha.split('T')[0].split('-')[1]}  |  ${doc.data().turnoFecha.split('T')[1]}  |  ${doc.data().turnoMedico}
                 </div>
             `);
         });
         $$('.btnEditarTurno').on('click', cargarTurno);
     })
-    .catch((error) => console.log("Error mostrarTurno: ", error));
+    .catch((error) => console.error("Error mostrarTurno: ", error));
 }
 
 function mostrarTodosTurnos() {
@@ -523,13 +567,13 @@ function mostrarTodosTurnos() {
         querySnapshot.forEach((doc) => {
             $$('#turnos_' + doc.data().turnoMes).append(`
                 <div id="${doc.id}" class="turnos col-100 row popup-open btnEditarTurno" data-popup=".turno-popup">
-                    ${doc.data().turnoFecha.split('T')[0]} ${doc.data().turnoFecha.split('T')[1]}  ${doc.data().turnoMedico}
+                ${doc.data().turnoFecha.split('T')[0].split('-')[2]}/${doc.data().turnoFecha.split('T')[0].split('-')[1]}  |  ${doc.data().turnoFecha.split('T')[1]}  |  ${doc.data().turnoMedico}
                 </div>
             `);
         });
         $$('.btnEditarTurno').on('click', cargarTurno);
     })
-    .catch((error) => console.log("Error mostrarTodosTurnos: ", error));
+    .catch((error) => console.error("Error mostrarTodosTurnos: ", error));
 }
 
 function crearTurno() {
@@ -552,11 +596,11 @@ function cargarTurno() {
     firebase.firestore().collection('turnos').doc(idparaeditar).get()
     .then((doc) => {
         $$('#turnoMedico').val(doc.data().turnoMedico);
-    $$('#turnoLugar').val(doc.data().turnoLugar);
-    $$('#turnoConsulta').val(doc.data().turnoConsulta);
-    $$('#turnoFecha').val(doc.data().turnoFecha);
+        $$('#turnoLugar').val(doc.data().turnoLugar);
+        $$('#turnoConsulta').val(doc.data().turnoConsulta);
+        $$('#turnoFecha').val(doc.data().turnoFecha);
     })
-    .catch((error) => console.log("Error cargarTurno: ", error));
+    .catch((error) => console.error("Error cargarTurno: ", error));
 }
 
 function guardarTurno() {
@@ -612,13 +656,13 @@ function mostrarCumple() {
             $$('#cumpleTablero').append(`
                 <div id="${doc.id}" class="cumples col-100 row popup-open btnEditarCumple
                 ${(doc.data().cumpleFecha.split('-')[2] === diaActual) ? 'hoyCumple' : ''}" data-popup=".cumple-popup">
-                    ${doc.data().cumpleFecha}   ${doc.data().cumpleNombre} [${doc.data().cumpleRelacion}]
+                    ${doc.data().cumpleFecha.split('-')[2]}/${doc.data().cumpleFecha.split('-')[1]}  |  ${doc.data().cumpleNombre} [${doc.data().cumpleRelacion}]
                 </div>
             `);
         });
         $$('.btnEditarCumple').on('click', cargarCumple);
     })
-    .catch((error) => console.log("Error mostrarCumple: ", error));
+    .catch((error) => console.error("Error mostrarCumple: ", error));
 }
 
 function mostrarTodosCumples() {
@@ -629,13 +673,13 @@ function mostrarTodosCumples() {
         querySnapshot.forEach((doc) => {
             $$('#cumples_' + doc.data().cumpleMes).append(`
             <div id="${doc.id}" class="cumples col-100 row popup-open btnEditarCumple" data-popup=".cumple-popup">
-                ${doc.data().cumpleFecha}   ${doc.data().cumpleNombre} [${doc.data().cumpleRelacion}]
+                ${doc.data().cumpleFecha.split('-')[2]}/${doc.data().cumpleFecha.split('-')[1]}  |  ${doc.data().cumpleNombre} [${doc.data().cumpleRelacion}]
             </div>
             `);
         });
         $$('.btnEditarCumple').on('click', cargarCumple);
     })
-    .catch((error) => console.log("Error mostrarTodosCumples: ", error));
+    .catch((error) => console.error("Error mostrarTodosCumples: ", error));
 }
 
 function crearCumple() {
@@ -659,7 +703,7 @@ function cargarCumple() {
     $$('#cumpleRelacion').val(doc.data().cumpleRelacion);
     $$('#cumpleFecha').val(doc.data().cumpleFecha);
     })
-    .catch((error) => console.log("Error cargarCumple: ", error));
+    .catch((error) => console.error("Error cargarCumple: ", error));
 }
 
 function guardarCumple() {
@@ -694,13 +738,3 @@ function borrarCumple() {
     .then(() => mostrarCumple())
     .catch((error) => console.error("Error borrarCumple: ", error));
 }
-
-/* SOLUCION PARA REFRESCAR PANTALLA TODOS LOS DIAS A LAS 00.00, CON UN INTERVAL CADA 1 MINUTO
-var dia = new Date();
-var hs = dia.getHours();
-var min = dia.getMinutes();
-var sec = dia.getSeconds();
-if (hs === 0 && min === 0 && sec < 60) {
-    //refrescar pantalla
-}
-*/
