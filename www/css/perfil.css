@@ -149,7 +149,7 @@ h3 {
     border-bottom: 2px solid #1b1b1b;
 }
 
-#pastiTablero {
+#pastiTablero, #turnoTablero, #cumpleTablero {
     width: 100%;
 }
 
